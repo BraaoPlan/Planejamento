@@ -1,0 +1,29 @@
+========================================================================
+   QUALIMED - PLATAFORMA INTEGRADA DE GESTÃO DA QUALIDADE (SIGQ)
+========================================================================
+
+COMO USAR E COMPARTILHAR OS AGENDAMENTOS COM TODA A EQUIPE:
+
+1. COMO ABRIR O SISTEMA:
+   Basta dar dois cliques no arquivo:
+   >> "INICIAR_QUALIMED.bat"
+
+   (Se o sistema já estiver em execução na sua máquina, você também pode
+   abrir pelo atalho "1_CLIQUE_AQUI_PARA_ABRIR.url" ou "Abrir_QualiMed.url").
+
+   O inicializador conecta automaticamente ao banco de dados compartilhado
+   "qualimed.sqlite" na pasta Z: da rede e abre o seu navegador.
+
+2. PERSISTÊNCIA E SINCRONIZAÇÃO EM TEMPO REAL:
+   - Todo agendamento de consultoria, ação ou plano cadastrado por você
+     é salvo diretamente no banco central "qualimed.sqlite".
+   - Quando você ou outro analista cadastrar um novo agendamento, o sistema
+     dos demais colegas atualiza automaticamente em tempo real na tela.
+   - Mesmo que você feche o navegador, feche o programa ou desligue o
+     computador, ao abrir novamente pelo "INICIAR_QUALIMED.bat" todos os
+     seus dados estarão salvos e disponíveis para toda a equipe.
+
+3. DÚVIDAS OU SUPORTE:
+   - Não é necessário ter permissão de administrador ou liberar firewall.
+   - O sistema roda de forma integrada e segura no ambiente corporativo.
+========================================================================

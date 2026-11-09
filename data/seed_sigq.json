@@ -1,0 +1,913 @@
+{
+  "sectors": [
+    {
+      "setor": "Compliance",
+      "diretoria": "Compliance",
+      "analista": "Viviane Paiva"
+    },
+    {
+      "setor": "Comunicação Interna",
+      "diretoria": "Dir ADM",
+      "analista": "Larissa"
+    },
+    {
+      "setor": "ESG - Environmental, Social and Governance",
+      "diretoria": "Dir Adm",
+      "analista": "Larissa"
+    },
+    {
+      "setor": "ATS (Atração e Seleção)",
+      "diretoria": "Dir ADM",
+      "analista": "Larissa"
+    },
+    {
+      "setor": "BP (Business Partner)",
+      "diretoria": "Dir ADM",
+      "analista": "Larissa"
+    },
+    {
+      "setor": "DP (Departamento Pessoal)",
+      "diretoria": "Dir ADM",
+      "analista": "Larissa"
+    },
+    {
+      "setor": "DHO (Desenvolvimento Humano Organizacional)",
+      "diretoria": "Dir ADM",
+      "analista": "Larissa"
+    },
+    {
+      "setor": "Remuneração",
+      "diretoria": "Dir ADM",
+      "analista": "Larissa"
+    },
+    {
+      "setor": "SESMT - Segurança do Trabalho",
+      "diretoria": "Dir ADM",
+      "analista": "Larissa"
+    },
+    {
+      "setor": "SESMT - Bem estar",
+      "diretoria": "Dir ADM",
+      "analista": "Larissa"
+    },
+    {
+      "setor": "SESMT - Medicina do Trabalho",
+      "diretoria": "Dir ADM",
+      "analista": "Larissa"
+    },
+    {
+      "setor": "Desempenho, Carreira e Sucessão",
+      "diretoria": "Dir ADM",
+      "analista": "Larissa"
+    },
+    {
+      "setor": "Cuidar",
+      "diretoria": "Dir Ambulatorial",
+      "analista": "Dairiane"
+    },
+    {
+      "setor": "Ambulatório",
+      "diretoria": "Dir Ambulatorial",
+      "analista": "Dairiane"
+    },
+    {
+      "setor": "NAI - Nucleo de Atendimento Integrado",
+      "diretoria": "Dir Ambulatorial",
+      "analista": "Dairiane"
+    },
+    {
+      "setor": "Bem Envelhecer (Telemedicina e Monitoramento)",
+      "diretoria": "Dir Ambulatorial",
+      "analista": "Dairiane"
+    },
+    {
+      "setor": "CTD- Centro de Terapia da Dor",
+      "diretoria": "Dir Ambulatorial",
+      "analista": "Tainá"
+    },
+    {
+      "setor": "Diagnóstico",
+      "diretoria": "Dir Ambulatorial",
+      "analista": "Tainá"
+    },
+    {
+      "setor": "Laboratório",
+      "diretoria": "Dir Ambulatorial",
+      "analista": "Tainá"
+    },
+    {
+      "setor": "Oftalmologia",
+      "diretoria": "Dir Ambulatorial",
+      "analista": "Tainá"
+    },
+    {
+      "setor": "Oncologia",
+      "diretoria": "Dir Ambulatorial",
+      "analista": "Tainá"
+    },
+    {
+      "setor": "PEC - Programa de Estratificação do Cuidado",
+      "diretoria": "Dir Ambulatorial",
+      "analista": "Dairiane"
+    },
+    {
+      "setor": "Avaliação de Saúde",
+      "diretoria": "Dir Ambulatorial",
+      "analista": "Dairiane"
+    },
+    {
+      "setor": "Central de Material e Esterilização",
+      "diretoria": "Dir Assistencial (Unidades Avançadas)",
+      "analista": "Aline Pimenta Motta"
+    },
+    {
+      "setor": "Centro Cirúrgico",
+      "diretoria": "Dir Assistencial (Unidades Avançadas)",
+      "analista": "Aline Pimenta Motta"
+    },
+    {
+      "setor": "Fisioterapia",
+      "diretoria": "Dir Assistencial (Unidades Avançadas)",
+      "analista": "Aline Pimenta Motta"
+    },
+    {
+      "setor": "Fonoaudiologia",
+      "diretoria": "Dir Assistencial (Unidades Avançadas)",
+      "analista": "Aline Pimenta Motta"
+    },
+    {
+      "setor": "Hotelaria",
+      "diretoria": "Dir Assistencial (Unidades Avançadas)",
+      "analista": "Luana"
+    },
+    {
+      "setor": "Nutrição",
+      "diretoria": "Dir Assistencial (Unidades Avançadas)",
+      "analista": "Aline Pimenta Motta"
+    },
+    {
+      "setor": "Pronto Socorro Hospital",
+      "diretoria": "Dir Assistencial (Unidades Avançadas)",
+      "analista": "Aline Pimenta Motta"
+    },
+    {
+      "setor": "Pronto Socorro VV",
+      "diretoria": "Dir Assistencial (Unidades Avançadas)",
+      "analista": "Aline Pimenta Motta"
+    },
+    {
+      "setor": "Psicologia",
+      "diretoria": "Dir Assistencial (Unidades Avançadas)",
+      "analista": "Luana"
+    },
+    {
+      "setor": "Recepção de Unidade Avançada",
+      "diretoria": "Dir Assistencial (Unidades Avançadas)",
+      "analista": "Luana"
+    },
+    {
+      "setor": "Serviço Social",
+      "diretoria": "Dir Assistencial (Unidades Avançadas)",
+      "analista": "Luana"
+    },
+    {
+      "setor": "Transporte Ambulância",
+      "diretoria": "Dir Assistencial (Unidades Avançadas)",
+      "analista": "Aline Pimenta Motta"
+    },
+    {
+      "setor": "Unidade de Internação",
+      "diretoria": "Dir Assistencial (Unidades Avançadas)",
+      "analista": "Aline Pimenta Motta"
+    },
+    {
+      "setor": "Unidade de Paciente Crítico",
+      "diretoria": "Dir Assistencial (Unidades Avançadas)",
+      "analista": "Aline Pimenta Motta"
+    },
+    {
+      "setor": "Unidade de Terapia Intensiva",
+      "diretoria": "Dir Assistencial (Unidades Avançadas)",
+      "analista": "Aline Pimenta Motta"
+    },
+    {
+      "setor": "Higienização",
+      "diretoria": "Dir Assistencial (Unidades Avançadas)",
+      "analista": "Luana"
+    },
+    {
+      "setor": "Manutenção predial - Hospital",
+      "diretoria": "Dir Assistencial (Unidades Avançadas)",
+      "analista": "Luana"
+    },
+    {
+      "setor": "Controle de acesso",
+      "diretoria": "Dir Assistencial (Unidades Avançadas)",
+      "analista": "Luana"
+    },
+    {
+      "setor": "Faturamento",
+      "diretoria": "Dir Assistencial (Unidades Avançadas)",
+      "analista": "Luana"
+    },
+    {
+      "setor": "NIR",
+      "diretoria": "Dir Assistencial (Unidades Avançadas)",
+      "analista": "Luana"
+    },
+    {
+      "setor": "Gerência Informações Estratégica",
+      "diretoria": "Dir Assistencial (Unidades Avançadas)",
+      "analista": "Abraao"
+    },
+    {
+      "setor": "PAD - Programa Assistência Domiciliar",
+      "diretoria": "Dir Assistencial (Unidades Avançadas)",
+      "analista": "Dairiane"
+    },
+    {
+      "setor": "Desospitalização",
+      "diretoria": "Dir Assistencial (Unidades Avançadas)",
+      "analista": "Dairiane"
+    },
+    {
+      "setor": "PA Virtual",
+      "diretoria": "Dir Assistencial (Unidades Avançadas)",
+      "analista": "Dairiane"
+    },
+    {
+      "setor": "Central de serviços",
+      "diretoria": "Dir Assistencial (Unidades Avançadas)",
+      "analista": "Dairiane"
+    },
+    {
+      "setor": "Comercial",
+      "diretoria": "Dir Comercial",
+      "analista": "Fernanda"
+    },
+    {
+      "setor": "Ouvidoria",
+      "diretoria": "Dir Experiência do Cliente",
+      "analista": "Amanda"
+    },
+    {
+      "setor": "Regulação ANS",
+      "diretoria": "Dir ADM",
+      "analista": "Viviane Paiva"
+    },
+    {
+      "setor": "Inovação Experiência do Cliente (CX)",
+      "diretoria": "Dir Experiência do Cliente",
+      "analista": "Amanda"
+    },
+    {
+      "setor": "Atendimento Administrativo Presencial",
+      "diretoria": "Dir Experiência do Cliente",
+      "analista": "Amanda"
+    },
+    {
+      "setor": "Call Center",
+      "diretoria": "Dir Experiência do Cliente",
+      "analista": "Amanda"
+    },
+    {
+      "setor": "Cadastro/Gestão de contratos",
+      "diretoria": "Dir Experiência do Cliente",
+      "analista": "Amanda"
+    },
+    {
+      "setor": "Gestão de Contratos (Cobrança)",
+      "diretoria": "Dir Financeiro",
+      "analista": "Fernanda"
+    },
+    {
+      "setor": "Controladoria Contábil",
+      "diretoria": "Dir Financeiro",
+      "analista": "Fernanda"
+    },
+    {
+      "setor": "Controladoria Fiscal",
+      "diretoria": "Dir Financeiro",
+      "analista": "Fernanda"
+    },
+    {
+      "setor": "Controladoria Patrimonial",
+      "diretoria": "Dir Financeiro",
+      "analista": "Fernanda"
+    },
+    {
+      "setor": "Planejamento e report",
+      "diretoria": "Dir Financeiro",
+      "analista": "Fernanda"
+    },
+    {
+      "setor": "Tesouraria",
+      "diretoria": "Dir Financeiro",
+      "analista": "Fernanda"
+    },
+    {
+      "setor": "Nucleo Adm",
+      "diretoria": "Dir Gov. Qualidade e Estratégia",
+      "analista": "Luana"
+    },
+    {
+      "setor": "Educação Continuada",
+      "diretoria": "Dir Gov. Qualidade e Estratégia",
+      "analista": "Luana"
+    },
+    {
+      "setor": "Qualidade e Gestão de Riscos Assistenciais",
+      "diretoria": "Dir Gov. Qualidade e Estratégia",
+      "analista": "Luana"
+    },
+    {
+      "setor": "Gestão e Qualidade",
+      "diretoria": "Dir Gov. Qualidade e Estratégia",
+      "analista": "Luana"
+    },
+    {
+      "setor": "Epidemiologia",
+      "diretoria": "Dir Gov. Qualidade e Estratégia",
+      "analista": "Luana"
+    },
+    {
+      "setor": "NPCI",
+      "diretoria": "Dir Gov. Qualidade e Estratégia",
+      "analista": "Luana"
+    },
+    {
+      "setor": "Gestão de Projetos Estratégicos",
+      "diretoria": "Dir Gov. Qualidade e Estratégia",
+      "analista": "Luana"
+    },
+    {
+      "setor": "Assuntos Regulatórios e Licenciamento",
+      "diretoria": "Dir Infra/Supri",
+      "analista": "Ana Carol"
+    },
+    {
+      "setor": "Operações e Negócios",
+      "diretoria": "Dir Infra/Supri",
+      "analista": "Ana Carol"
+    },
+    {
+      "setor": "OPME Negociociação",
+      "diretoria": "Dir Infra/Supri",
+      "analista": "Ana Carol"
+    },
+    {
+      "setor": "OPME Autorização",
+      "diretoria": "Dir Infra/Supri",
+      "analista": "Ana Carol"
+    },
+    {
+      "setor": "Infraestrutura - Obras e Projetos de expansão",
+      "diretoria": "Dir Infra/Supri",
+      "analista": "Ana Carol"
+    },
+    {
+      "setor": "Infraestrutura - Planejamento e Controle",
+      "diretoria": "Dir Infra/Supri",
+      "analista": "Ana Carol"
+    },
+    {
+      "setor": "Infraestrutura - Compras e Contratações",
+      "diretoria": "Dir Infra/Supri",
+      "analista": "Ana Carol"
+    },
+    {
+      "setor": "Infraestrutura - Projetos e Arquitetura",
+      "diretoria": "Dir Infra/Supri",
+      "analista": "Ana Carol"
+    },
+    {
+      "setor": "Infraestrutura - Manutenção Predial",
+      "diretoria": "Dir Infra/Supri",
+      "analista": "Ana Carol"
+    },
+    {
+      "setor": "Compras",
+      "diretoria": "Dir Infra/Supri",
+      "analista": "Ana Carol"
+    },
+    {
+      "setor": "Operações Logísticas",
+      "diretoria": "Dir Infra/Supri",
+      "analista": "Ana Carol"
+    },
+    {
+      "setor": "Estratégia de Suprimentos",
+      "diretoria": "Dir Infra/Supri",
+      "analista": "Ana Carol"
+    },
+    {
+      "setor": "Engenharia Clinica",
+      "diretoria": "Dir Infra/Supri",
+      "analista": "Tainá"
+    },
+    {
+      "setor": "Farmácia Oncologia",
+      "diretoria": "Dir Infra/Supri",
+      "analista": "Tainá"
+    },
+    {
+      "setor": "Farmácia Hospitalar",
+      "diretoria": "Dir Infra/Supri",
+      "analista": "Tainá"
+    },
+    {
+      "setor": "Marketing",
+      "diretoria": "Dir MKT",
+      "analista": "Fernanda"
+    },
+    {
+      "setor": "Vendas Digitais - LEADs",
+      "diretoria": "Dir MKT",
+      "analista": "Fernanda"
+    },
+    {
+      "setor": "Cadastro/Credenciamento de rede",
+      "diretoria": "Dir Relacionamento de Rede (credenciamento)",
+      "analista": "Viviane Paiva"
+    },
+    {
+      "setor": "Dados BI",
+      "diretoria": "Dir TI",
+      "analista": "Abraao"
+    },
+    {
+      "setor": "Infraestrutura - TI",
+      "diretoria": "Dir TI",
+      "analista": "Abraao"
+    },
+    {
+      "setor": "Inovação Aberta",
+      "diretoria": "Dir TI",
+      "analista": "Abraao"
+    },
+    {
+      "setor": "Inovação Estratégia e Cultura",
+      "diretoria": "Dir TI",
+      "analista": "Abraao"
+    },
+    {
+      "setor": "Inovação Fomento",
+      "diretoria": "Dir TI",
+      "analista": "Abraao"
+    },
+    {
+      "setor": "Inovação Inteligência Artificial",
+      "diretoria": "Dir TI",
+      "analista": "Abraao"
+    },
+    {
+      "setor": "Inovação Produtos Tecnológicos",
+      "diretoria": "Dir TI",
+      "analista": "Abraao"
+    },
+    {
+      "setor": "Inovação Prototipação",
+      "diretoria": "Dir TI",
+      "analista": "Abraao"
+    },
+    {
+      "setor": "Sistemas Administrativos",
+      "diretoria": "Dir TI",
+      "analista": "Abraao"
+    },
+    {
+      "setor": "Sistemas Diagnósticos",
+      "diretoria": "Dir TI",
+      "analista": "Abraao"
+    },
+    {
+      "setor": "Sistemas Internos",
+      "diretoria": "Dir TI",
+      "analista": "Abraao"
+    },
+    {
+      "setor": "Sistemas Assistenciais",
+      "diretoria": "Dir TI",
+      "analista": "Abraao"
+    },
+    {
+      "setor": "Automoção (Inovação em Processos e RPA)",
+      "diretoria": "Dir TI",
+      "analista": "Abraao"
+    },
+    {
+      "setor": "Segurança da Informação - TI",
+      "diretoria": "Dir TI",
+      "analista": "Abraao"
+    },
+    {
+      "setor": "Service Desk - TI",
+      "diretoria": "Dir TI",
+      "analista": "Abraao"
+    },
+    {
+      "setor": "DITI",
+      "diretoria": "Dir TI",
+      "analista": "Abraao"
+    },
+    {
+      "setor": "PMO",
+      "diretoria": "Dir TI",
+      "analista": "Abraao"
+    },
+    {
+      "setor": "Governança de TI",
+      "diretoria": "Dir TI",
+      "analista": "Abraao"
+    },
+    {
+      "setor": "Auditoria Interna",
+      "diretoria": "Gerência de Auditoria Interna",
+      "analista": "Viviane Paiva"
+    },
+    {
+      "setor": "Jurídico",
+      "diretoria": "Juridico",
+      "analista": "Viviane Paiva"
+    },
+    {
+      "setor": "DAC Eletivo",
+      "diretoria": "Super. Regulação e Contas Médicas",
+      "analista": "Amanda"
+    },
+    {
+      "setor": "DAC Urgência",
+      "diretoria": "Super. Regulação e Contas Médicas",
+      "analista": "Amanda"
+    },
+    {
+      "setor": "Auditoria de Enfermagem",
+      "diretoria": "Super. Regulação e Contas Médicas",
+      "analista": "Viviane Paiva"
+    },
+    {
+      "setor": "Auditoria Médica",
+      "diretoria": "Super. Regulação e Contas Médicas",
+      "analista": "Viviane Paiva"
+    },
+    {
+      "setor": "Contas Médicas Rede Interna",
+      "diretoria": "Super. Regulação e Contas Médicas",
+      "analista": "Viviane Paiva"
+    },
+    {
+      "setor": "Contas Médicas Rede Externa",
+      "diretoria": "Super. Regulação e Contas Médicas",
+      "analista": "Viviane Paiva"
+    },
+    {
+      "setor": "Credenciamento DAC",
+      "diretoria": "Super. Regulação e Contas Médicas",
+      "analista": "Amanda"
+    },
+    {
+      "setor": "DGA",
+      "diretoria": "Super. Regulação e Contas Médicas",
+      "analista": "Amanda"
+    },
+    {
+      "setor": "Agendamento",
+      "diretoria": "Dir Ambulatorial",
+      "analista": "Amanda"
+    }
+  ],
+  "analysts": [
+    {
+      "nome": "Abraao",
+      "pin": "1234"
+    },
+    {
+      "nome": "Aline Pimenta Motta",
+      "pin": "1234"
+    },
+    {
+      "nome": "Amanda",
+      "pin": "1234"
+    },
+    {
+      "nome": "Ana Carol",
+      "pin": "1234"
+    },
+    {
+      "nome": "Dairiane",
+      "pin": "1234"
+    },
+    {
+      "nome": "Fernanda",
+      "pin": "1234"
+    },
+    {
+      "nome": "Larissa",
+      "pin": "1234"
+    },
+    {
+      "nome": "Luana",
+      "pin": "1234"
+    },
+    {
+      "nome": "Tainá",
+      "pin": "1234"
+    },
+    {
+      "nome": "Viviane Paiva",
+      "pin": "1234"
+    }
+  ],
+  "activities": [
+    {
+      "id": 1,
+      "mes": "NOVEMBRO",
+      "data": "2026-11-09",
+      "horario": "09:00 - 10:00",
+      "ch": 1,
+      "processo": "Qualidade e Gestão de Riscos Assistenciais",
+      "categoria": "Documentos",
+      "atividade": "Reunião Semanal Qualidade",
+      "consultor": "Viviane Paiva",
+      "responsavel": "",
+      "status": "PENDENTE",
+      "aprovado": 1,
+      "solicitante": "Equipe da Qualidade",
+      "why": "",
+      "how": "",
+      "resultado": "",
+      "acompanhamento": "",
+      "subcategoria": "Elaboração de documentos",
+      "motivo_status": "",
+      "data_conclusao": null,
+      "recorrente": 1,
+      "recorrencia_freq": "SEMANAL",
+      "recorrencia_fim": "2026-12-09",
+      "recorrencia_grupo": "REC_1793724379041",
+      "link_teams": null
+    },
+    {
+      "id": 2,
+      "mes": "NOVEMBRO",
+      "data": "2026-11-16",
+      "horario": "09:00 - 10:00",
+      "ch": 1,
+      "processo": "Qualidade e Gestão de Riscos Assistenciais",
+      "categoria": "Documentos",
+      "atividade": "Reunião Semanal Qualidade",
+      "consultor": "Viviane Paiva",
+      "responsavel": "",
+      "status": "PENDENTE",
+      "aprovado": 1,
+      "solicitante": "Equipe da Qualidade",
+      "why": "",
+      "how": "",
+      "resultado": "",
+      "acompanhamento": "",
+      "subcategoria": "Elaboração de documentos",
+      "motivo_status": "",
+      "data_conclusao": null,
+      "recorrente": 1,
+      "recorrencia_freq": "SEMANAL",
+      "recorrencia_fim": "2026-12-09",
+      "recorrencia_grupo": "REC_1793724379041",
+      "link_teams": null
+    },
+    {
+      "id": 3,
+      "mes": "NOVEMBRO",
+      "data": "2026-11-23",
+      "horario": "09:00 - 10:00",
+      "ch": 1,
+      "processo": "Qualidade e Gestão de Riscos Assistenciais",
+      "categoria": "Documentos",
+      "atividade": "Reunião Semanal Qualidade",
+      "consultor": "Viviane Paiva",
+      "responsavel": "",
+      "status": "PENDENTE",
+      "aprovado": 1,
+      "solicitante": "Equipe da Qualidade",
+      "why": "",
+      "how": "",
+      "resultado": "",
+      "acompanhamento": "",
+      "subcategoria": "Elaboração de documentos",
+      "motivo_status": "",
+      "data_conclusao": null,
+      "recorrente": 1,
+      "recorrencia_freq": "SEMANAL",
+      "recorrencia_fim": "2026-12-09",
+      "recorrencia_grupo": "REC_1793724379041",
+      "link_teams": null
+    },
+    {
+      "id": 4,
+      "mes": "NOVEMBRO",
+      "data": "2026-11-30",
+      "horario": "09:00 - 10:00",
+      "ch": 1,
+      "processo": "Qualidade e Gestão de Riscos Assistenciais",
+      "categoria": "Documentos",
+      "atividade": "Reunião Semanal Qualidade",
+      "consultor": "Viviane Paiva",
+      "responsavel": "",
+      "status": "PENDENTE",
+      "aprovado": 1,
+      "solicitante": "Equipe da Qualidade",
+      "why": "",
+      "how": "",
+      "resultado": "",
+      "acompanhamento": "",
+      "subcategoria": "Elaboração de documentos",
+      "motivo_status": "",
+      "data_conclusao": null,
+      "recorrente": 1,
+      "recorrencia_freq": "SEMANAL",
+      "recorrencia_fim": "2026-12-09",
+      "recorrencia_grupo": "REC_1793724379041",
+      "link_teams": null
+    },
+    {
+      "id": 5,
+      "mes": "DEZEMBRO",
+      "data": "2026-12-07",
+      "horario": "09:00 - 10:00",
+      "ch": 1,
+      "processo": "Qualidade e Gestão de Riscos Assistenciais",
+      "categoria": "Documentos",
+      "atividade": "Reunião Semanal Qualidade",
+      "consultor": "Viviane Paiva",
+      "responsavel": "",
+      "status": "PENDENTE",
+      "aprovado": 1,
+      "solicitante": "Equipe da Qualidade",
+      "why": "",
+      "how": "",
+      "resultado": "",
+      "acompanhamento": "",
+      "subcategoria": "Elaboração de documentos",
+      "motivo_status": "",
+      "data_conclusao": null,
+      "recorrente": 1,
+      "recorrencia_freq": "SEMANAL",
+      "recorrencia_fim": "2026-12-09",
+      "recorrencia_grupo": "REC_1793724379041",
+      "link_teams": null
+    },
+    {
+      "id": 6,
+      "mes": "NOVEMBRO",
+      "data": "2026-11-09",
+      "horario": "14:00 - 15:00",
+      "ch": 1,
+      "processo": "Auditoria Médica",
+      "categoria": "Documentos",
+      "atividade": "Revisão e atualização de documentos / Treinamento EPA",
+      "consultor": "Viviane Paiva",
+      "responsavel": "Samira Challub",
+      "status": "PENDENTE",
+      "aprovado": 1,
+      "solicitante": "Equipe da Qualidade",
+      "why": "",
+      "how": "",
+      "resultado": "",
+      "acompanhamento": "",
+      "subcategoria": "Revisão de documentos",
+      "motivo_status": "",
+      "data_conclusao": null,
+      "recorrente": 0,
+      "recorrencia_freq": null,
+      "recorrencia_fim": null,
+      "recorrencia_grupo": null,
+      "link_teams": "https://teams.microsoft.com/meet/2551136619371920?p=OKwG3czGQtBnFzdMfE"
+    },
+    {
+      "id": 7,
+      "mes": "NOVEMBRO",
+      "data": "2026-11-03",
+      "horario": "14:30 - 15:00",
+      "ch": 0.5,
+      "processo": "Estratégia de Suprimentos",
+      "categoria": "Documentos",
+      "atividade": "Orientação sobre documentos em revisão para Auditoria Interna",
+      "consultor": "Ana Carol",
+      "responsavel": "Feito com Lorena / Gabriel",
+      "status": "EM ANDAMENTO",
+      "aprovado": 1,
+      "solicitante": "Equipe da Qualidade",
+      "why": "",
+      "how": "",
+      "resultado": "",
+      "acompanhamento": "[{\"id\":\"1793728116338\",\"dataStr\":\"03/11/2026 14:48\",\"autor\":\"Equipe da Qualidade\",\"texto\":\"Feito orientação sobre documentos enviados com sugestão para ajustes.\"}]",
+      "subcategoria": "Revisão de documentos",
+      "motivo_status": "",
+      "data_conclusao": "2026-11-03",
+      "recorrente": 0,
+      "recorrencia_freq": null,
+      "recorrencia_fim": null,
+      "recorrencia_grupo": null,
+      "link_teams": null
+    },
+    {
+      "id": 8,
+      "mes": "NOVEMBRO",
+      "data": "2026-11-03",
+      "horario": "08:00 - 12:30",
+      "ch": 4.5,
+      "processo": "Atividades Internas",
+      "categoria": "Documentos",
+      "atividade": "Revisão de documentos advindos de solicitação no EPA.",
+      "consultor": "Ana Carol",
+      "responsavel": "",
+      "status": "CONCLUÍDO",
+      "aprovado": 1,
+      "solicitante": "Equipe da Qualidade",
+      "why": "",
+      "how": "",
+      "resultado": "",
+      "acompanhamento": "[{\"id\":\"legacy_0\",\"dataStr\":\"\",\"autor\":\"Ana Carol\",\"texto\":\"FR - Laudo de Obsolescência;\\nIT - Rotina de Assistente de Atendimento CTDM\\nPR - Licenciamento regulatório Unidades VV e Serra.\"}]",
+      "subcategoria": "Revisão de documentos",
+      "motivo_status": "",
+      "data_conclusao": "2026-11-03",
+      "recorrente": 0,
+      "recorrencia_freq": null,
+      "recorrencia_fim": null,
+      "recorrencia_grupo": null,
+      "link_teams": null
+    }
+  ],
+  "diagnostics": [
+    {
+      "processo": "Compras",
+      "responsavel": "Ana Carol / Suprimentos",
+      "ocorrencias": 3,
+      "acoesPendentes": 2,
+      "docsVencidos": 4,
+      "indicadoresNoPrazo": 75,
+      "criticidade": "ALTA",
+      "recomendacao": "Revisão imediata da política de compras e homologação."
+    },
+    {
+      "processo": "Pronto Socorro Hospital",
+      "responsavel": "Aline Pimenta Motta",
+      "ocorrencias": 5,
+      "acoesPendentes": 2,
+      "docsVencidos": 2,
+      "indicadoresNoPrazo": 80,
+      "criticidade": "MÉDIA",
+      "recomendacao": "Tratamento de causa raiz com 5 Porquês para tempo de espera."
+    },
+    {
+      "processo": "Comunicação Interna",
+      "responsavel": "Larissa / ADM",
+      "ocorrencias": 1,
+      "acoesPendentes": 1,
+      "docsVencidos": 1,
+      "indicadoresNoPrazo": 90,
+      "criticidade": "BAIXA",
+      "recomendacao": "Atualização pontual dos manuais de identidade."
+    },
+    {
+      "processo": "Dados BI",
+      "responsavel": "Abraao / TI",
+      "ocorrencias": 0,
+      "acoesPendentes": 1,
+      "docsVencidos": 0,
+      "indicadoresNoPrazo": 100,
+      "criticidade": "BAIXA",
+      "recomendacao": "Documentação do catálogo de métricas."
+    },
+    {
+      "processo": "Ouvidoria",
+      "responsavel": "Amanda / CX",
+      "ocorrencias": 4,
+      "acoesPendentes": 3,
+      "docsVencidos": 1,
+      "indicadoresNoPrazo": 70,
+      "criticidade": "ALTA",
+      "recomendacao": "Plano de melhoria no fluxo de tratativas de segundo nível."
+    }
+  ],
+  "actions5w2h": [
+    {
+      "id": 1,
+      "what": "Revisar todos os POPs com vigência expirada",
+      "why": "Garantir conformidade com ONA e auditorias",
+      "where": "Compras",
+      "who": "Ana Carol",
+      "when": "2026-10-15",
+      "how": "Reuniões semanais de 4h de consultoria interna",
+      "status": "EM ANDAMENTO"
+    },
+    {
+      "id": 2,
+      "what": "Padronizar o preenchimento de causa raiz das ocorrências",
+      "why": "Melhorar a eficácia dos planos de ação",
+      "where": "Pronto Socorro Hospital",
+      "who": "Aline Pimenta Motta",
+      "when": "2026-10-20",
+      "how": "Oficina prática com corpo assistencial",
+      "status": "PENDENTE"
+    }
+  ]
+}

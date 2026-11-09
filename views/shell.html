@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QualiMed • Sistema Integrado de Gestão da Qualidade & EPA</title>
+  <link rel="stylesheet" href="/css/navbar.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #FFFFFF;
+    }
+    .qm-shell-root {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      width: 100vw;
+    }
+    .qm-shell-viewport {
+      flex: 1;
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 90px);
+      background: #FFFFFF;
+    }
+    .qm-tab-frame {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: none;
+      background: #FFFFFF;
+    }
+    .qm-tab-frame.active {
+      display: block;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <div class="qm-shell-root">
+    <div id="qualimed-navbar-root"></div>
+    <div class="qm-shell-viewport">
+      <iframe id="frame-qualidade" data-tab="qualidade" class="qm-tab-frame active" src="/panel/qualidade?embed=1" title="Plataforma da Qualidade (SIGQ)"></iframe>
+      <iframe id="frame-ocorrencias" data-tab="ocorrencias" class="qm-tab-frame" src="/panel/ocorrencias?embed=1" title="Dashboard de Ocorrências do EPA"></iframe>
+      <iframe id="frame-acoes" data-tab="acoes" class="qm-tab-frame" src="/panel/acoes?embed=1" title="Dashboard de Ações e Análise da Qualidade"></iframe>
+    </div>
+  </div>
+
+  <script src="/js/navbar.js"></script>
+  <script>
+    // Inicializar aba correta de acordo com a URL inicial
+    (function initInitialTab() {
+      const p = window.location.pathname;
+      let targetTab = 'qualidade';
+      if (p.includes('/ocorrencias')) targetTab = 'ocorrencias';
+      else if (p.includes('/acoes')) targetTab = 'acoes';
+
+      document.querySelectorAll('.qm-tab-frame').forEach(frame => {
+        frame.classList.toggle('active', frame.id === 'frame-' + targetTab);
+      });
+      document.querySelectorAll('.qm-nav-tab').forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.tab === targetTab);
+      });
+    })();
+  </script>
+</body>
+</html>

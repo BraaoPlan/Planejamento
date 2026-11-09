@@ -1,0 +1,725 @@
+﻿/* ==========================================================
+   QUALIMED - BARRA DE NAVEGAÇÃO E SISTEMA DE ABAS ENTERPRISE
+   Paleta Oficial MedSênior: Tons de Verde, Slate e Branco Puro
+   Design: Abas Conectadas Autênticas, Zero Emojis, SVGs Nativos
+   ========================================================== */
+:root {
+  --qm-green-dark: #074724;
+  --qm-green: #0E6838;
+  --qm-green-light: #15803D;
+  --qm-emerald: #10B981;
+  --qm-border: #E2E8F0;
+  --qm-border-tab: #CBD5E1;
+  --qm-tab-inactive-bg: #F1F5F9;
+  --qm-text-main: #0F172A;
+  --qm-text-muted: #64748B;
+}
+
+.qm-navbar-header {
+  background: #FFFFFF;
+  border-bottom: 1px solid var(--qm-border);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  box-shadow: 0 4px 16px -2px rgba(7, 71, 36, 0.05);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.qm-navbar-top {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 8px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* Marca / Logo */
+.qm-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+.qm-brand-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #074724 0%, #0E6838 50%, #15803D 100%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 10px rgba(14, 104, 56, 0.25);
+}
+
+.qm-brand-icon svg {
+  width: 20px;
+  height: 20px;
+  stroke: #ffffff;
+  stroke-width: 2.2;
+}
+
+.qm-brand-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.qm-brand-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--qm-green-dark);
+  letter-spacing: -0.3px;
+  line-height: 1.2;
+}
+
+.qm-brand-subtitle {
+  font-size: 11px;
+  color: var(--qm-text-muted);
+  font-weight: 500;
+}
+
+/* Controles de Usuário e SQLite */
+.qm-user-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.qm-db-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: #ECFDF5;
+  border: 1px solid #A7F3D0;
+  color: #065F46;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.qm-db-dot {
+  width: 7px;
+  height: 7px;
+  background: #10B981;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #10B981;
+}
+
+.qm-user-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #F8FAFC;
+  border: 1px solid var(--qm-border);
+  padding: 4px 10px 4px 5px;
+  border-radius: 20px;
+}
+
+.qm-user-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #D1FAE5;
+  color: var(--qm-green-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.qm-user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.qm-user-name {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--qm-text-main);
+  line-height: 1.2;
+}
+
+.qm-user-role {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--qm-green);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.qm-btn-switch-user {
+  background: #FFF1F2;
+  border: 1px solid #FECDD3;
+  color: #BE123C;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.qm-btn-switch-user:hover {
+  background: #FFE4E6;
+  color: #9F1239;
+  border-color: #FDA4AF;
+}
+
+/* ========================================================
+   BARRA DE ABAS PRINCIPAL (TABS) - VISUAL DE FOLDER TABS
+   ======================================================== */
+.qm-tabs-bar {
+  background: #F8FAFC;
+  border-top: 1px solid var(--qm-border);
+  border-bottom: 2px solid var(--qm-border);
+  padding: 0 20px;
+}
+
+.qm-tabs-list {
+  max-width: 1600px;
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  position: relative;
+  bottom: -2px; /* Encaixa sobre a borda inferior */
+  overflow-x: auto;
+}
+
+.qm-nav-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--qm-text-muted);
+  background: var(--qm-tab-inactive-bg);
+  border: 1px solid var(--qm-border-tab);
+  border-bottom: 2px solid var(--qm-border);
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  text-decoration: none;
+  white-space: nowrap;
+  font-family: inherit;
+  outline: none;
+  user-select: none;
+}
+
+.qm-nav-tab:hover {
+  color: var(--qm-green);
+  background: #E8F5E9;
+  border-color: #A7F3D0;
+}
+
+.qm-nav-tab.active {
+  background: #FFFFFF;
+  color: var(--qm-green-dark);
+  border-color: var(--qm-border-tab);
+  border-top: 3px solid var(--qm-green);
+  border-bottom: 2px solid #FFFFFF; /* Abre a base da aba, conectando com a página */
+  font-weight: 800;
+  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.03);
+  z-index: 10;
+}
+
+.qm-nav-tab svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 2.2;
+}
+
+.qm-tab-title {
+  line-height: 1;
+}
+
+.qm-tab-badge {
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 10px;
+  background: #E2E8F0;
+  color: #475569;
+  transition: all 0.2s ease;
+}
+
+.qm-nav-tab.active .qm-tab-badge {
+  background: #ECFDF5;
+  color: #065F46;
+  border: 1px solid #A7F3D0;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .qm-tab-badge { display: none; }
+  .qm-brand-subtitle { display: none; }
+  .qm-nav-tab { padding: 9px 12px; font-size: 12px; }
+}
+
+
+/* ==========================================================
+   BOTÃO E MODAL: MODO REUNIÃO DE DIRETORIA / COMITÊ QUALIDADE
+   ========================================================== */
+.qm-btn-meeting {
+  background: linear-gradient(135deg, #074724 0%, #0E6838 100%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(7, 71, 36, 0.25);
+  font-family: inherit;
+}
+
+.qm-btn-meeting:hover {
+  background: linear-gradient(135deg, #053319 0%, #074724 100%);
+  box-shadow: 0 4px 12px rgba(7, 71, 36, 0.35);
+  transform: translateY(-1px);
+}
+
+.qm-btn-meeting svg {
+  stroke: #FFFFFF;
+}
+
+/* OVERLAY DO MODO REUNIÃO */
+.qm-meeting-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
+  z-index: 99999;
+  overflow-y: auto;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 24px 16px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.qm-meeting-box {
+  background: #FFFFFF;
+  width: 100%;
+  max-width: 1320px;
+  border-radius: 16px;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.35);
+  border: 1px solid #E2E8F0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: qm-modal-appear 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes qm-modal-appear {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.qm-meeting-loading {
+  padding: 80px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  color: var(--qm-green-dark);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/* CABEÇALHO EXECUTIVO */
+.qm-meeting-header {
+  padding: 20px 28px;
+  background: linear-gradient(135deg, #074724 0%, #0E6838 70%, #15803D 100%);
+  color: #FFFFFF;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.qm-meeting-brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.qm-meeting-logo {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+}
+
+.qm-meeting-title {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.qm-meeting-sub {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 3px 0 0 0;
+  font-weight: 500;
+}
+
+.qm-meeting-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  font-size: 11px;
+  color: #A7F3D0;
+  font-weight: 600;
+}
+
+.qm-meeting-divider {
+  opacity: 0.6;
+}
+
+.qm-meeting-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.qm-meeting-btn {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.qm-btn-print {
+  background: #FFFFFF;
+  color: var(--qm-green-dark);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.qm-btn-print:hover {
+  background: #ECFDF5;
+  color: #065F46;
+  transform: translateY(-1px);
+}
+
+.qm-btn-close {
+  background: rgba(255, 255, 255, 0.15);
+  color: #FFFFFF;
+  padding: 8px;
+}
+
+.qm-btn-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* KPIS EXECUTIVOS */
+.qm-meeting-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 16px;
+  padding: 24px 28px 12px 28px;
+  background: #F8FAFC;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.qm-m-kpi {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.qm-m-kpi.green { border-left: 4px solid #10B981; }
+.qm-m-kpi.red { border-left: 4px solid #E11D48; }
+.qm-m-kpi.gold { border-left: 4px solid #F59E0B; }
+
+.qm-m-kpi-label {
+  font-size: 10px;
+  font-weight: 800;
+  color: #64748B;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.qm-m-kpi-val {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0F172A;
+  line-height: 1.1;
+}
+
+.qm-m-kpi-val.text-green { color: #0E6838; }
+.qm-m-kpi-val.text-red { color: #BE123C; }
+.qm-m-kpi-val.text-gold { color: #B45309; }
+
+.qm-m-kpi-desc {
+  font-size: 11px;
+  color: #64748B;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* GRÁFICOS DO COMITÊ */
+.qm-meeting-charts-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 20px;
+  padding: 20px 28px;
+}
+
+.qm-m-chart-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.qm-m-chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.qm-m-chart-title {
+  margin: 0;
+  font-size: 14.5px;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+.qm-m-chart-sub {
+  margin: 2px 0 0 0;
+  font-size: 11px;
+  color: #64748B;
+  font-weight: 500;
+}
+
+.qm-m-badge-green {
+  background: #ECFDF5;
+  color: #065F46;
+  border: 1px solid #A7F3D0;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.qm-m-badge-gold {
+  background: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #FDE68A;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.qm-m-badge-slate {
+  background: #F1F5F9;
+  color: #475569;
+  border: 1px solid #CBD5E1;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.qm-m-insight-callout {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 11.5px;
+  color: #166534;
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+/* TABELAS EXECUTIVAS */
+.qm-m-table-section {
+  padding: 0 28px 20px 28px;
+}
+
+.qm-m-table-wrap {
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.qm-m-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.qm-m-table th {
+  background: #F8FAFC;
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  color: #475569;
+  border-bottom: 1px solid #E2E8F0;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.qm-m-table td {
+  padding: 11px 14px;
+  border-bottom: 1px solid #F1F5F9;
+  color: #1E293B;
+}
+
+.qm-m-tag-analyst {
+  background: #E8F5E9;
+  color: #0E6838;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 11.5px;
+}
+
+.qm-m-crit {
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-weight: 800;
+  font-size: 10.5px;
+}
+
+.qm-m-crit.crit-alta { background: #FFE4E6; color: #BE123C; }
+.qm-m-crit.crit-media { background: #FEF3C7; color: #B45309; }
+
+/* LINHA 4: AÇÕES */
+.qm-m-actions-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  padding: 0 28px 20px 28px;
+}
+
+.qm-m-action-box {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 14px 18px;
+}
+
+.qm-m-action-box strong {
+  display: block;
+  font-size: 18px;
+  font-weight: 800;
+  margin: 4px 0 2px 0;
+}
+
+.qm-m-action-box p {
+  margin: 0;
+  font-size: 11px;
+  color: #64748B;
+  font-weight: 500;
+}
+
+.qm-m-action-box.alert {
+  background: #FFF1F2;
+  border-color: #FECDD3;
+}
+
+.qm-m-action-box.green {
+  background: #F0FDF4;
+  border-color: #BBF7D0;
+}
+
+/* RODAPÉ DO MODAL */
+.qm-meeting-footer {
+  padding: 14px 28px;
+  background: #F8FAFC;
+  border-top: 1px solid #E2E8F0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #64748B;
+  font-weight: 500;
+}
+
+/* ==========================================================
+   FORMATAÇÃO PARA IMPRESSÃO EM PDF (A4 OFICIAL)
+   ========================================================== */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .qm-meeting-overlay,
+  #qm-meeting-print-area,
+  #qm-meeting-print-area * {
+    visibility: visible;
+  }
+  .qm-meeting-overlay {
+    position: absolute;
+    inset: 0;
+    background: transparent;
+    padding: 0;
+    display: block !important;
+  }
+  .qm-meeting-box {
+    max-width: 100% !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .qm-meeting-charts-grid {
+    grid-template-columns: 1fr 1fr;
+    page-break-inside: avoid;
+  }
+  .qm-m-table-section {
+    page-break-inside: avoid;
+  }
+}

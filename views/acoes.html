@@ -1,0 +1,2198 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard de Gestão da Qualidade – MedSênior</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2d774f;
+      --primary-dark: #1e5336;
+      --primary-light: #eef7f2;
+      --accent: #9ec83b;
+      --accent-hover: #8cb52f;
+      --bg: #f8faf9;
+      --card-bg: #ffffff;
+      --border: #e4ebe7;
+      --text-main: #18271e;
+      --text-muted: #5e7367;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-pill: 9999px;
+      --shadow-sm: 0 2px 6px rgba(45, 119, 79, 0.04);
+      --shadow-md: 0 6px 18px rgba(45, 119, 79, 0.07);
+      --shadow-hover: 0 10px 24px rgba(45, 119, 79, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body { 
+      margin: 0; 
+      background: var(--bg); 
+      color: var(--text-main); 
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+      -webkit-font-smoothing: antialiased;
+    }
+
+    header { 
+      background: var(--card-bg); 
+      border-bottom: 1px solid var(--border); 
+      padding: 14px 32px; 
+      position: sticky; 
+      top: 0; 
+      z-index: 50;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+    }
+    .top { 
+      max-width: 1600px; 
+      margin: auto; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      gap: 20px; 
+    }
+    .brand-area {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .brand-logo-wrap {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      user-select: none;
+    }
+    .brand-logo-svg { height: 38px; width: auto; display: block; }
+    .brand-divider { height: 34px; width: 1.5px; background: var(--border); }
+    h1 { 
+      margin: 0; 
+      font-size: 18px; 
+      font-weight: 800; 
+      color: var(--text-main); 
+      letter-spacing: -0.02em;
+    }
+    .sub { color: var(--text-muted); font-size: 12px; font-weight: 500; margin-top: 2px; }
+
+    .tabs-nav {
+      display: inline-flex;
+      align-items: flex-end;
+      gap: 6px;
+      border-bottom: 2px solid var(--border);
+      padding: 0 4px;
+      margin-bottom: -1px;
+    }
+    .tab-btn {
+      border: 1px solid #CBD5E1;
+      border-bottom: none;
+      background: #F1F5F9;
+      padding: 10px 20px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #64748B;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: inherit;
+      position: relative;
+      bottom: -2px;
+    }
+    .tab-btn:hover {
+      color: var(--primary);
+      background: #E2E8F0;
+    }
+    .tab-btn.active {
+      background: #FFFFFF;
+      color: var(--primary-dark);
+      border-color: #CBD5E1;
+      border-top: 3px solid var(--primary);
+      border-bottom: 2px solid #FFFFFF;
+      font-weight: 800;
+      box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.04);
+      z-index: 2;
+    }
+    .tab-badge {
+      background: #E2E8F0;
+      color: #475569;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 10px;
+    }
+    .tab-btn.active .tab-badge {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border: 1px solid rgba(45, 119, 79, 0.3);
+    }
+
+    .top-actions { display: flex; align-items: center; gap: 10px; }
+    .btn {
+      border: 0;
+      border-radius: var(--radius-pill);
+      padding: 8px 16px;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      font-family: inherit;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #fff;
+      box-shadow: 0 3px 10px rgba(45, 119, 79, 0.22);
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 14px rgba(45, 119, 79, 0.32);
+      background: linear-gradient(135deg, #358c5c, var(--primary));
+    }
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--primary-dark);
+      border: 1.5px solid var(--border);
+    }
+    .btn-secondary:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+    .btn-outline-danger {
+      background: #fff;
+      color: #dc2626;
+      border: 1px solid #fecaca;
+      padding: 6px 10px;
+      font-size: 11px;
+    }
+    .btn-outline-danger:hover { background: #fef2f2; }
+
+    #fileInput { display: none; }
+    .info { font-size: 11px; color: var(--text-muted); text-align: right; }
+    .info #fileName { font-weight: 600; color: var(--text-main); }
+
+    main { max-width: 1600px; margin: auto; padding: 22px 32px; }
+
+    .notice { 
+      display: none; 
+      padding: 12px 18px; 
+      border-radius: var(--radius-md); 
+      margin-bottom: 18px; 
+      font-size: 13px; 
+      font-weight: 600; 
+      animation: fadeIn 0.3s ease;
+    }
+    .notice.success { background: #eefaf2; color: #166534; border: 1px solid #bbf0cb; }
+    .notice.error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+
+    .filters { 
+      background: var(--card-bg); 
+      border: 1px solid var(--border); 
+      border-radius: var(--radius-lg); 
+      padding: 18px 20px; 
+      display: grid; 
+      gap: 14px; 
+      box-shadow: var(--shadow-sm);
+    }
+    .filters-acoes { grid-template-columns: 1.3fr 1.3fr 1fr 1fr 1.2fr; }
+    .filters-analise { grid-template-columns: 1.2fr 1.3fr 1.2fr 1fr 1fr 1.1fr; }
+
+    label { 
+      font-size: 11px; 
+      font-weight: 700; 
+      display: block; 
+      margin-bottom: 6px; 
+      color: var(--text-main); 
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    input, select { 
+      width: 100%; 
+      padding: 9px 12px; 
+      border: 1.5px solid var(--border); 
+      border-radius: var(--radius-md); 
+      box-sizing: border-box; 
+      font-size: 12.5px; 
+      font-family: inherit;
+      outline: none; 
+      background: #fafcfb;
+      color: var(--text-main);
+      transition: all 0.2s ease;
+    }
+    input:focus, select:focus { 
+      border-color: var(--primary); 
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(45, 119, 79, 0.15); 
+    }
+    .search { position: relative; }
+    .results { 
+      display: none; 
+      position: absolute; 
+      top: 45px; 
+      left: 0; 
+      right: 0; 
+      background: #ffffff; 
+      border: 1px solid var(--border); 
+      border-radius: var(--radius-md); 
+      z-index: 100; 
+      max-height: 220px; 
+      overflow-y: auto; 
+      box-shadow: var(--shadow-md); 
+    }
+    .results.open { display: block; }
+    .person, .item-select { padding: 9px 12px; cursor: pointer; font-size: 12px; font-weight: 500; transition: background 0.15s ease; }
+    .person:hover, .item-select:hover { background: var(--primary-light); color: var(--primary); font-weight: 600; }
+    .chosen { margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; min-height: 26px; }
+    .chip { 
+      background: var(--primary-light); 
+      color: var(--primary); 
+      border: 1px solid rgba(45, 119, 79, 0.2);
+      border-radius: var(--radius-pill); 
+      padding: 3px 10px; 
+      font-size: 11px; 
+      font-weight: 700; 
+      display: inline-flex; 
+      align-items: center; 
+      gap: 6px;
+    }
+    .chip button { 
+      border: 0; background: none; color: var(--primary); font-weight: 800; cursor: pointer; padding: 0; font-size: 14px; 
+    }
+    .buttons { margin-top: 6px; display: flex; gap: 6px; }
+    .buttons button { 
+      font-size: 11px; font-weight: 600; background: #ffffff; border: 1px solid var(--border); 
+      border-radius: var(--radius-pill); padding: 4px 10px; cursor: pointer; transition: all 0.2s ease;
+      color: var(--text-muted);
+    }
+    .buttons button:hover { background: var(--primary-light); border-color: var(--primary); color: var(--primary); }
+
+    .active-filters {
+      display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 12px;
+    }
+    .filter-tag {
+      background: #e9f0ec; color: var(--primary-dark); font-size: 11px; font-weight: 700;
+      padding: 3px 10px; border-radius: var(--radius-pill); display: inline-flex; align-items: center; gap: 6px;
+      border: 1px solid rgba(45, 119, 79, 0.15);
+    }
+    .filter-tag button { border: 0; background: none; cursor: pointer; font-weight: bold; color: inherit; font-size: 13px; }
+
+    .kpis { display: grid; gap: 14px; margin: 20px 0; }
+    .kpis-5 { grid-template-columns: repeat(5, 1fr); }
+    .kpis-6 { grid-template-columns: repeat(6, 1fr); }
+
+    .kpi { 
+      background: var(--card-bg); 
+      border: 1.5px solid var(--border); 
+      border-radius: var(--radius-lg); 
+      padding: 16px 18px; 
+      cursor: pointer; 
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); 
+      position: relative;
+      box-shadow: var(--shadow-sm);
+    }
+    .kpi:hover { 
+      transform: translateY(-2px); 
+      box-shadow: var(--shadow-hover); 
+      border-color: #cbd5cb; 
+    }
+    .kpi.active { 
+      border-color: var(--primary); 
+      background: #f2f9f5;
+      box-shadow: 0 4px 14px rgba(45, 119, 79, 0.15);
+    }
+    .kpi .label { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
+    .kpi .num { font-size: 28px; font-weight: 800; margin-top: 6px; color: var(--text-main); letter-spacing: -0.02em; }
+    .kpi .hint { font-size: 10px; color: var(--text-muted); margin-top: 4px; font-weight: 500; }
+
+    .grid { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 18px; margin-bottom: 22px; }
+    .card, .table { 
+      background: var(--card-bg); 
+      border: 1px solid var(--border); 
+      border-radius: var(--radius-lg); 
+      padding: 20px; 
+      box-shadow: var(--shadow-sm);
+    }
+    h2 { font-size: 15px; margin: 0 0 14px; color: var(--text-main); font-weight: 700; letter-spacing: -0.01em; }
+    .chart { height: 260px; position: relative; }
+
+    .table-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .table-tools {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .scroll { overflow-x: auto; max-height: 580px; border-radius: var(--radius-md); border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th, td { padding: 11px 13px; border-bottom: 1px solid var(--border); text-align: left; }
+    th { 
+      background: #f4f7f5; 
+      position: sticky; 
+      top: 0; 
+      z-index: 2; 
+      font-weight: 700; 
+      color: var(--text-muted); 
+      text-transform: uppercase; 
+      font-size: 11px; 
+      user-select: none;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    th:hover { background: #e8f0ec; color: var(--primary-dark); }
+    th .sort-icon { font-size: 10px; margin-left: 4px; color: var(--primary); }
+    tr:hover { background-color: #f7faf8; }
+    
+    .link-codigo {
+      color: var(--primary);
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      background: var(--primary-light);
+      border: 1px solid rgba(45, 119, 79, 0.2);
+      transition: all 0.2s ease;
+    }
+    .link-codigo:hover {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+    .link-codigo svg { width: 10px; height: 10px; fill: currentColor; }
+
+    .link-ocorr { color: var(--primary); cursor: pointer; text-decoration: underline; font-weight: 600; }
+    .link-ocorr:hover { color: var(--primary-dark); }
+    .action-cell { cursor: pointer; color: var(--text-main); }
+    .action-cell:hover { color: var(--primary); text-decoration: underline; }
+
+    .badge { border-radius: var(--radius-pill); padding: 4px 10px; font-weight: 700; font-size: 11px; display: inline-block; cursor: pointer; }
+    .badge.red { background: #fee2e2; color: #991b1b; }
+    .badge.yellow { background: #fef3c7; color: #92400e; }
+    .badge.green { background: #dcfce7; color: #166534; }
+    .badge.gray { background: #f1f5f9; color: #475569; }
+    .badge.blue { background: #e0f2fe; color: #0369a1; }
+    .badge.purple { background: #f3e8ff; color: #6b21a8; }
+
+    .pagination {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .pagination select { width: auto; padding: 4px 8px; font-size: 12px; }
+    .pag-buttons { display: flex; gap: 4px; align-items: center; }
+    .pag-btn {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 5px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text-main);
+    }
+    .pag-btn:hover:not(:disabled) { background: var(--primary-light); border-color: var(--primary); color: var(--primary); }
+    .pag-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      max-width: 680px;
+      width: 100%;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+      padding: 24px 28px;
+      animation: modalSlide 0.25s ease;
+      position: relative;
+    }
+    .modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+    .modal-title { margin: 0; font-size: 17px; font-weight: 800; color: var(--text-main); }
+    .modal-close { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-muted); font-weight: bold; line-height: 1; }
+    .modal-close:hover { color: #dc2626; }
+    .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; font-size: 13px; }
+    .modal-desc-box {
+      background: #f8faf9;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      font-size: 13px;
+      line-height: 1.6;
+      max-height: 240px;
+      overflow-y: auto;
+      white-space: pre-line;
+      color: #334155;
+    }
+    .modal-footer { margin-top: 18px; display: flex; justify-content: flex-end; gap: 10px; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes modalSlide { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+
+    @media(max-width: 1350px){
+      .filters-analise { grid-template-columns: 1fr 1fr 1fr; }
+    }
+    @media(max-width: 1250px){
+      .grid { grid-template-columns: 1fr 1fr; }
+      .filters-acoes { grid-template-columns: 1fr 1fr; }
+      .kpis-5, .kpis-6 { grid-template-columns: 1fr 1fr 1fr; }
+    }
+    @media(max-width: 750px){
+      header { padding: 14px 18px; }
+      .top { flex-direction: column; align-items: flex-start; gap: 14px; }
+      .brand-area { width: 100%; justify-content: space-between; }
+      .brand-divider { display: none; }
+      .grid, .filters-acoes, .filters-analise, .kpis-5, .kpis-6 { grid-template-columns: 1fr; }
+      main { padding: 16px; }
+    }
+  </style>
+  <link rel="stylesheet" href="/css/navbar.css">
+</head>
+<body>
+  <div id="qualimed-navbar-root"></div>
+  <header>
+    <div class="top">
+      <div class="brand-area">
+        <div class="brand-logo-wrap" title="MedSênior">
+          <svg class="brand-logo-svg" viewBox="0 0 240 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <text x="5" y="55" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-weight="800" font-size="44" fill="#36815a" letter-spacing="-1.5">Med</text>
+            <text x="96" y="55" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-weight="700" font-size="44" fill="#a7cf44" letter-spacing="-1.5">Sênior</text>
+            <g transform="translate(170, 0)">
+              <path d="M22 36C22 36 12 25 15 11C18 -3 33 2 33 2C33 2 39 15 36 26C33 34 22 36 22 36Z" fill="#a7cf44" />
+              <path d="M12 40C12 40 24 38 38 29C52 20 62 25 62 25C62 25 56 36 44 42C30 49 12 40 12 40Z" fill="#36815a" />
+              <path d="M13 40C25 36 40 32 60 26" stroke="#f8faf9" stroke-width="1.8" stroke-linecap="round" />
+            </g>
+          </svg>
+        </div>
+
+        <div class="brand-divider"></div>
+
+        <nav class="tabs-nav">
+          <button id="tabBtnAcoes" class="tab-btn active" onclick="switchTab('acoes')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px;"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><path d="m9 14 2 2 4-4"/></svg><span>Acompanhamento de Ações</span>
+            <span id="tabBadgeAcoes" class="tab-badge">0</span>
+          </button>
+          <button id="tabBtnAnalise" class="tab-btn" onclick="switchTab('analise')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span>Aguardando Análise</span>
+            <span id="tabBadgeAnalise" class="tab-badge">0</span>
+          </button>
+        </nav>
+      </div>
+
+      <div class="top-actions">
+        <input id="fileInput" type="file" accept=".xlsx, .xls">
+        <button id="uploadBtn" class="btn btn-primary" title="Subir nova planilha de Ações ou Ocorrências">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          Atualizar planilha
+        </button>
+        <div class="info">
+          <div id="fileName">Aguardando dados...</div>
+          <div id="lastUpdate"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="notice" class="notice"></div>
+
+    <!-- ========================================== -->
+    <!-- VIEW 1: ACOMPANHAMENTO DE AÇÕES (TAB 1)    -->
+    <!-- ========================================== -->
+    <div id="viewAcoes">
+      <section class="filters filters-acoes">
+        <div>
+          <label>Responsável da Ação</label>
+          <div class="search">
+            <input id="respSearch" placeholder="Pesquisar dono da ação..." autocomplete="off">
+            <div id="results" class="results"></div>
+          </div>
+          <div class="chosen" id="chosen"></div>
+          <div class="buttons">
+            <button id="all">Selecionar todos</button>
+            <button id="clear">Limpar</button>
+          </div>
+        </div>
+        <div>
+          <label>Ocorrência</label>
+          <select id="ocorrencia"><option value="">Todas as ocorrências</option></select>
+        </div>
+        <div>
+          <label>Status</label>
+          <select id="status">
+            <option value="">Todos os status</option>
+            <option value="Atrasada">Atrasada</option>
+            <option value="Vencendo (0–30 dias)">Vencendo (0–30 dias)</option>
+            <option value="No prazo">No prazo</option>
+          </select>
+        </div>
+        <div>
+          <label>Tipo</label>
+          <select id="tipo"><option value="">Todos</option></select>
+        </div>
+        <div>
+          <label>Busca livre</label>
+          <input id="busca" placeholder="Código, ação, detalhes...">
+        </div>
+      </section>
+
+      <div id="activeFilters" class="active-filters"></div>
+
+      <!-- KPIs Tab 1 -->
+      <section class="kpis kpis-5">
+        <div class="kpi" id="kpi-total" onclick="setKpiFilter('total')">
+          <div class="label">Total de Ações</div>
+          <div class="num" id="total">0</div>
+          <div class="hint">Clique para ver todos</div>
+        </div>
+        <div class="kpi" id="kpi-atrasadas" onclick="setKpiFilter('Atrasada')">
+          <div class="label">Atrasadas</div>
+          <div class="num" id="atrasadas" style="color: #dc2626;">0</div>
+          <div class="hint">Clique para filtrar atrasadas</div>
+        </div>
+        <div class="kpi" id="kpi-vencendo" onclick="setKpiFilter('Vencendo (0–30 dias)')">
+          <div class="label">Vencendo (0–30 dias)</div>
+          <div class="num" id="vencendo" style="color: #d97706;">0</div>
+          <div class="hint">Clique para filtrar vencendo</div>
+        </div>
+        <div class="kpi" id="kpi-noprazo" onclick="setKpiFilter('No prazo')">
+          <div class="label">No prazo</div>
+          <div class="num" id="noprazo" style="color: var(--primary);">0</div>
+          <div class="hint">Clique para filtrar no prazo</div>
+        </div>
+        <div class="kpi" id="kpi-semresp" onclick="setKpiFilter('semresp')">
+          <div class="label">Sem responsável</div>
+          <div class="num" id="semresp" style="color: var(--text-muted);">0</div>
+          <div class="hint">Ações sem dono</div>
+        </div>
+      </section>
+
+      <!-- Gráficos Tab 1 -->
+      <section class="grid">
+        <div class="card">
+          <h2>Status das Ações (Clique p/ filtrar)</h2>
+          <div class="chart"><canvas id="chartStatus"></canvas></div>
+        </div>
+        <div class="card">
+          <h2>Distribuição por Tipo</h2>
+          <div class="chart"><canvas id="chartTipo"></canvas></div>
+        </div>
+        <div class="card">
+          <h2>Top Responsáveis com Ações Pendentes</h2>
+          <div class="chart"><canvas id="chartResp"></canvas></div>
+        </div>
+      </section>
+
+      <!-- Tabela Tab 1 -->
+      <section class="table">
+        <div class="table-top-bar">
+          <div>
+            <h2 style="margin:0 0 2px 0;">Detalhamento das Ações</h2>
+            <div id="count" class="sub"></div>
+          </div>
+          <div class="table-tools">
+            <button id="btnCopySummary" class="btn btn-secondary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Copiar Resumo</button>
+            <button id="btnExportExcel" class="btn btn-secondary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>Exportar Excel</button>
+            <button id="btnClearStorageAcoes" class="btn btn-outline-danger" onclick="clearTabStorage('acoes')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>Limpar dados locais</button>
+          </div>
+        </div>
+
+        <div class="scroll">
+          <table>
+            <thead>
+              <tr>
+                <th onclick="sortTable('Código')">Código da Ação <span id="sort-Código" class="sort-icon"></span></th>
+                <th onclick="sortTable('Status')">Status <span id="sort-Status" class="sort-icon"></span></th>
+                <th onclick="sortTable('Responsável')">Responsável (Dono da Ação) <span id="sort-Responsável" class="sort-icon"></span></th>
+                <th onclick="sortTable('Ação')">Ação (clique p/ abrir) <span id="sort-Ação" class="sort-icon"></span></th>
+                <th onclick="sortTable('Ocorrência')">Ocorrência (clique p/ filtrar) <span id="sort-Ocorrência" class="sort-icon"></span></th>
+                <th onclick="sortTable('Data Início')">Início <span id="sort-Data Início" class="sort-icon"></span></th>
+                <th onclick="sortTable('Data Fim')">Fim <span id="sort-Data Fim" class="sort-icon"></span></th>
+                <th onclick="sortTable('Dias Restantes')">Dias Restantes <span id="sort-Dias Restantes" class="sort-icon"></span></th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+
+        <div class="pagination">
+          <div style="font-size: 12px; color: var(--text-muted); display:flex; align-items:center; gap:6px;">
+            Linhas por página:
+            <select id="pageSize" onchange="changePageSize(this.value)">
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+              <option value="all">Todas</option>
+            </select>
+            <span id="pageInfo" style="margin-left:8px;"></span>
+          </div>
+          <div class="pag-buttons">
+            <button id="btnPrevPage" class="pag-btn" onclick="prevPage()">Anterior</button>
+            <button id="btnNextPage" class="pag-btn" onclick="nextPage()">Próxima</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- VIEW 2: OCORRÊNCIAS AGUARDANDO ANÁLISE                           -->
+    <!-- ============================================================== -->
+    <div id="viewAnalise" style="display:none;">
+      <section class="filters filters-analise">
+        <div>
+          <label>Analista Responsável</label>
+          <select id="analistaSelect" onchange="onAnalistaChange(this.value)">
+            <option value="">Todos os analistas</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Setor / Área</label>
+          <select id="setorSelect" onchange="onSetorChange(this.value)">
+            <option value="">Todos os setores</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Unidades Notificadas (Múltiplo)</label>
+          <div class="search">
+            <input id="notificadaSearch" placeholder="Pesquisar e adicionar unidade..." autocomplete="off">
+            <div id="resultsNotificada" class="results"></div>
+          </div>
+          <div class="chosen" id="chosenNotificada"></div>
+          <div class="buttons">
+            <button id="clearNotificadaBtn" onclick="clearNotificadas()">Limpar Unidades</button>
+          </div>
+        </div>
+
+        <div>
+          <label>Fase da Análise</label>
+          <select id="faseAnalise"><option value="">Todas as fases</option></select>
+        </div>
+
+        <div>
+          <label>Responsável</label>
+          <div class="search">
+            <input id="respSearchAnalise" placeholder="Pesquisar responsável..." autocomplete="off">
+            <div id="resultsAnalise" class="results"></div>
+          </div>
+          <div class="chosen" id="chosenAnalise"></div>
+          <div class="buttons">
+            <button id="allAnalise">Todos</button>
+            <button id="clearAnalise">Limpar</button>
+          </div>
+        </div>
+
+        <div>
+          <label>Busca livre</label>
+          <input id="buscaAnalise" placeholder="Código, ação, notificadora...">
+        </div>
+      </section>
+
+      <div id="activeFiltersAnalise" class="active-filters"></div>
+
+      <!-- KPIs Tab 2 -->
+      <section class="kpis kpis-6">
+        <div class="kpi" id="kpi-an-total" onclick="setKpiFilterAnalise('total')">
+          <div class="label">Total Geral</div>
+          <div class="num" id="an-total">0</div>
+          <div class="hint">Aguardando análise</div>
+        </div>
+        <div class="kpi" id="kpi-an-fase1" onclick="setKpiFilterAnalise('fase1')">
+          <div class="label">Fase 1</div>
+          <div class="num" id="an-fase1" style="color: #2563eb;">0</div>
+          <div class="hint">Avaliar Ocorrência</div>
+        </div>
+        <div class="kpi" id="kpi-an-fase3" onclick="setKpiFilterAnalise('fase3')">
+          <div class="label">Fase 3</div>
+          <div class="num" id="an-fase3" style="color: #8b5cf6;">0</div>
+          <div class="hint">Validar Causa / Plano</div>
+        </div>
+        <div class="kpi" id="kpi-an-fase5" onclick="setKpiFilterAnalise('fase5')">
+          <div class="label">Fase 5</div>
+          <div class="num" id="an-fase5" style="color: var(--primary);">0</div>
+          <div class="hint">Validar Execução Ações</div>
+        </div>
+        <div class="kpi" id="kpi-an-atrasadas" onclick="setKpiFilterAnalise('atrasadas')">
+          <div class="label">Análise Atrasada</div>
+          <div class="num" id="an-atrasadas" style="color: #dc2626;">0</div>
+          <div class="hint">Prazo expirado</div>
+        </div>
+        <div class="kpi" id="kpi-an-semresp" onclick="setKpiFilterAnalise('semresp')">
+          <div class="label">Sem Responsável</div>
+          <div class="num" id="an-semresp" style="color: var(--text-muted);">0</div>
+          <div class="hint">Pendentes de atribuição</div>
+        </div>
+      </section>
+
+      <!-- Gráficos Tab 2 -->
+      <section class="grid">
+        <div class="card">
+          <h2>Distribuição por Fase</h2>
+          <div class="chart"><canvas id="chartFase"></canvas></div>
+        </div>
+        <div class="card">
+          <h2>Top Unidades Notificadas</h2>
+          <div class="chart"><canvas id="chartNotificada"></canvas></div>
+        </div>
+        <div class="card">
+          <h2>Top Responsáveis p/ Análise</h2>
+          <div class="chart"><canvas id="chartRespAnalise"></canvas></div>
+        </div>
+      </section>
+
+      <!-- Tabela Tab 2 -->
+      <section class="table">
+        <div class="table-top-bar">
+          <div>
+            <h2 style="margin:0 0 2px 0;">Ocorrências Aguardando Análise</h2>
+            <div id="countAnalise" class="sub"></div>
+          </div>
+          <div class="table-tools">
+            <button id="btnCopySummaryAnalise" class="btn btn-secondary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Copiar Resumo</button>
+            <button id="btnExportExcelAnalise" class="btn btn-secondary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>Exportar Excel</button>
+            <button id="btnClearStorageAnalise" class="btn btn-outline-danger" onclick="clearTabStorage('analise')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>Limpar dados locais</button>
+          </div>
+        </div>
+
+        <div class="scroll">
+          <table>
+            <thead>
+              <tr>
+                <th onclick="sortTableAnalise('Código')">Código (EPA) <span id="sort-an-Código" class="sort-icon"></span></th>
+                <th onclick="sortTableAnalise('Fase')">Fase <span id="sort-an-Fase" class="sort-icon"></span></th>
+                <th onclick="sortTableAnalise('Responsável')">Responsável <span id="sort-an-Responsável" class="sort-icon"></span></th>
+                <th onclick="sortTableAnalise('Ação')">Ocorrência / Ação <span id="sort-an-Ação" class="sort-icon"></span></th>
+                <th onclick="sortTableAnalise('Unidade Notificada')">Unidade Notificada <span id="sort-an-Unidade Notificada" class="sort-icon"></span></th>
+                <th onclick="sortTableAnalise('Unidade Notificadora')">Notificadora <span id="sort-an-Unidade Notificadora" class="sort-icon"></span></th>
+                <th onclick="sortTableAnalise('Prazo da Análise')">Prazo <span id="sort-an-Prazo da Análise" class="sort-icon"></span></th>
+                <th onclick="sortTableAnalise('Dias de Atraso')">Dias Restantes/Atraso <span id="sort-an-Dias de Atraso" class="sort-icon"></span></th>
+              </tr>
+            </thead>
+            <tbody id="tbodyAnalise"></tbody>
+          </table>
+        </div>
+
+        <div class="pagination">
+          <div style="font-size: 12px; color: var(--text-muted); display:flex; align-items:center; gap:6px;">
+            Linhas por página:
+            <select id="pageSizeAnalise" onchange="changePageSizeAnalise(this.value)">
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+              <option value="all">Todas</option>
+            </select>
+            <span id="pageInfoAnalise" style="margin-left:8px;"></span>
+          </div>
+          <div class="pag-buttons">
+            <button id="btnPrevPageAnalise" class="pag-btn" onclick="prevPageAnalise()">Anterior</button>
+            <button id="btnNextPageAnalise" class="pag-btn" onclick="nextPageAnalise()">Próxima</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Modal Elegante de Detalhes da Ação (Aba 1) -->
+  <div id="modalBackdrop" class="modal-backdrop" onclick="closeModal(event)">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <span id="modalBadge" class="badge" style="margin-bottom:6px;"></span>
+          <h3 id="modalTitle" class="modal-title"></h3>
+        </div>
+        <button class="modal-close" onclick="closeModal()">×</button>
+      </div>
+
+      <div class="modal-grid">
+        <div><strong>Código da Ação:</strong> <span id="modalCodigo"></span></div>
+        <div><strong>Dono da Ação:</strong> <span id="modalResp"></span></div>
+        <div><strong>Ocorrência de Origem:</strong> <span id="modalOcorr"></span></div>
+        <div><strong>Tipo:</strong> <span id="modalTipo"></span></div>
+        <div><strong>Prazo Final:</strong> <span id="modalFim"></span> (<span id="modalDias"></span> dias restantes)</div>
+      </div>
+
+      <label>Descrição Completa da Ação / Histórico de Auditoria:</label>
+      <div id="modalDesc" class="modal-desc-box"></div>
+
+      <div class="modal-footer">
+        <a href="https://medsenior.sysepa.com.br/epa/qualidade_minhas_ocorrencia.php?ultimo_encaminhamento=&bt_voltar=1" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+          Acessar Ocorrências no EPA
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M14 3h7v7h-2V6.414l-9.293 9.293-1.414-1.414L17.586 5H14V3zM5 5h6V3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-6h-2v6H5V5z"/></svg>
+        </a>
+        <button class="btn btn-secondary" onclick="closeModal()">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SECTORS_ANALYSTS_MAP = {
+      "Viviane Paiva": [
+        "Compliance", "Regulação ANS", "Cadastro/Credenciamento de rede", "Auditoria Interna", 
+        "Jurídico", "Auditoria de Enfermagem", "Auditoria Médica", "Contas Médicas Rede Interna", "Contas Médicas Rede Externa"
+      ],
+      "Larissa": [
+        "Comunicação Interna", "ESG - Environmental, Social and Governance", "ATS (Atração e Seleção)", 
+        "BP (Business Partner)", "DP (Departamento Pessoal)", "DHO (Desenvolvimento Humano Organizacional)", 
+        "Remuneração", "SESMT - Segurança do Trabalho", "SESMT - Bem estar", "SESMT - Medicina do Trabalho", "Desempenho, Carreira e Sucessão"
+      ],
+      "Doiriane": [
+        "Cuidar", "Ambulatório", "NAI - Nucleo de Atendimento Integrado", "Bem Envelhecer (Telemedicina e Monitoramento)", 
+        "PEC - Programa de Estratificação do Cuidado", "Avaliação de Saúde", "PAD - Programa Assistência Domiciliar", 
+        "Desospitalização", "PA Virtual", "Central de serviços"
+      ],
+      "Tainá": [
+        "CTD - Centro de Terapia da Dor", "Diagnóstico", "Laboratório", "Oftalmologia", 
+        "Oncologia", "Engenharia Clínica", "Farmácia Oncologia", "Farmácia Hospitalar"
+      ],
+      "Aline Pimenta Motta": [
+        "Central de Material e Esterilização", "Centro Cirúrgico", "Fisioterapia", "Fonoaudiologia", 
+        "Nutrição", "Pronto Socorro Hospital", "Pronto Socorro VV", "Transporte Ambulância", 
+        "Unidade de Internação", "Unidade de Paciente Crítico", "Unidade de Terapia Intensiva"
+      ],
+      "Luana": [
+        "Hotelaria", "Psicologia", "Recepção de Unidade Avançada", "Serviço Social", "Higienização", 
+        "Manutenção predial - Hospital", "Controle de acesso", "Faturamento", "NIR", "Núcleo Adm", 
+        "Educação Continuada", "Qualidade e Gestão de Riscos Assistenciais", "Gestão e Qualidade", 
+        "Epidemiologia", "NPCI", "Gestão de Projetos Estratégicos"
+      ],
+      "Abraao": [
+        "Infraestrutura - TI", "Segurança da Informação - TI", "Service Desk - TI", 
+        "Sistemas Administrativos", "Sistemas Diagnósticos", "Sistemas Internos", "Sistemas Assistenciais", 
+        "Automação (Inovação em Processos e RPA)", "Dados BI", "DITI", "PMO", "Governança de TI",
+        "Inovação Aberta", "Inovação Estratégia e Cultura", "Inovação Fomento", "Inovação Inteligência Artificial", 
+        "Inovação Produtos Tecnológicos", "Inovação Prototipação"
+      ],
+      "Fernanda": [
+        "Comercial", "Gestão de Contratos (Cobrança)", "Controladoria Contábil", "Controladoria Fiscal", 
+        "Controladoria Patrimonial", "Planejamento e report", "Tesouraria", "Marketing", "Vendas Digitais - LEADS"
+      ],
+      "Amanda": [
+        "Ouvidoria", "Inovação Experiência do Cliente (CX)", "Atendimento Administrativo Presencial", 
+        "Call Center", "Cadastro/Gestão de contratos", "DAC Eletivo", "DAC Urgência", "Credenciamento DAC", "DCA", "Agendamento"
+      ],
+      "Ana Carol": [
+        "Assuntos Regulatórios e Licenciamento", "Operações e Negócios", "OPME Negociação", "OPME Autorização", 
+        "Infraestrutura - Obras e Projetos de expansão", "Infraestrutura - Planejamento e Controle", 
+        "Infraestrutura - Compras e Contratações", "Infraestrutura - Projetos e Arquitetura", 
+        "Infraestrutura - Manutenção Predial", "Compras", "Operações Logísticas", "Estratégia de Suprimentos"
+      ]
+    };
+
+    let activeTab = 'acoes';
+
+    // Aba 1 (Ações)
+    let DATA = [];
+    let RESP = [];
+    let TIPOS = [];
+    let OCORRENCIAS = [];
+    let selectedResp = new Set();
+    let currentKpiMode = null; 
+    let chart1 = null, chart2 = null, chart3 = null;
+    let sortColumn = 'Dias Restantes';
+    let sortAsc = true;
+    let currentPage = 1;
+    let pageSize = 25;
+    let lastFilteredData = [];
+
+    // Aba 2 (Aguardando Análise)
+    let DATA_ANALISE = [];
+    let RESP_ANALISE = [];
+    let FASES_ANALISE = [];
+    let NOTIFICADAS_ANALISE = [];
+    let selectedNotificadas = new Set();
+    let selectedRespAnalise = new Set();
+    let currentKpiModeAnalise = null;
+    let currentAnalista = "";
+    let currentSetor = "";
+
+    let chartFase = null, chartNotificada = null, chartRespAnalise = null;
+    let sortColAnalise = 'Dias de Atraso';
+    let sortAscAnalise = true;
+    let curPageAnalise = 1;
+    let pSizeAnalise = 25;
+    let lastFilteredDataAnalise = [];
+
+    const URL_EPA_GERAL_OCORRENCIAS = "https://medsenior.sysepa.com.br/epa/qualidade_minhas_ocorrencia.php?ultimo_encaminhamento=&bt_voltar=1";
+    const BASE_URL_OCORRENCIA_TAB2 = "https://medsenior.sysepa.com.br/epa/qualidade_ocorrencia_processo_3_1.php?tab=3&codigo=";
+    const STORAGE_KEY_ACOES = "medsenior_dashboard_data_v1";
+    const STORAGE_KEY_ANALISE = "medsenior_dashboard_analise_v1";
+
+    const $ = id => document.getElementById(id);
+    const esc = v => String(v ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+
+    function showNotice(msg, isError = false) {
+      const box = $('notice');
+      box.textContent = msg;
+      box.className = 'notice ' + (isError ? 'error' : 'success');
+      box.style.display = 'block';
+      setTimeout(() => { box.style.display = 'none'; }, 4500);
+    }
+
+    function normalizeKey(str) {
+      return String(str || '').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    }
+
+    function formatDate(raw) {
+      if (!raw) return '';
+      if (raw instanceof Date && !isNaN(raw)) return raw.toLocaleDateString('pt-BR');
+      if (typeof raw === 'number') {
+        const parsed = XLSX.SSF.parse_date_code(raw);
+        if (parsed) {
+          const d = String(parsed.d).padStart(2, '0');
+          const m = String(parsed.m).padStart(2, '0');
+          return `${d}/${m}/${parsed.y}`;
+        }
+      }
+      return String(raw).trim();
+    }
+
+    function calculateDaysRemaining(dateStr, originalDays) {
+      if (originalDays !== undefined && originalDays !== '' && originalDays !== null && !isNaN(Number(originalDays))) {
+        return Math.round(Number(originalDays));
+      }
+      if (!dateStr) return null;
+      let parts = String(dateStr).split('/');
+      if (parts.length === 3) {
+        let dt = new Date(parts[2], parts[1] - 1, parts[0]);
+        if (!isNaN(dt)) {
+          let today = new Date();
+          today.setHours(0, 0, 0, 0);
+          return Math.ceil((dt - today) / (1000 * 60 * 60 * 24));
+        }
+      }
+      return null;
+    }
+
+    function switchTab(tab) {
+      activeTab = tab;
+      if (tab === 'acoes') {
+        $('tabBtnAcoes').classList.add('active');
+        $('tabBtnAnalise').classList.remove('active');
+        $('viewAcoes').style.display = 'block';
+        $('viewAnalise').style.display = 'none';
+        render();
+      } else {
+        $('tabBtnAnalise').classList.add('active');
+        $('tabBtnAcoes').classList.remove('active');
+        $('viewAnalise').style.display = 'block';
+        $('viewAcoes').style.display = 'none';
+        renderAnalise();
+      }
+    }
+
+    function clearTabStorage(tab) {
+      if (tab === 'acoes') {
+        if (confirm('Deseja limpar os dados da aba de Ações?')) {
+          localStorage.removeItem(STORAGE_KEY_ACOES);
+          DATA = []; RESP = []; TIPOS = []; OCORRENCIAS = []; selectedResp.clear();
+          render(); updateTabBadges();
+          showNotice('Dados de Ações removidos.');
+        }
+      } else {
+        if (confirm('Deseja limpar os dados da aba Aguardando Análise?')) {
+          localStorage.removeItem(STORAGE_KEY_ANALISE);
+          DATA_ANALISE = []; RESP_ANALISE = []; FASES_ANALISE = []; NOTIFICADAS_ANALISE = [];
+          selectedRespAnalise.clear(); selectedNotificadas.clear();
+          renderAnalise(); updateTabBadges();
+          showNotice('Dados de Aguardando Análise removidos.');
+        }
+      }
+    }
+
+    function updateTabBadges() {
+      $('tabBadgeAcoes').textContent = DATA.length;
+      $('tabBadgeAnalise').textContent = DATA_ANALISE.length;
+    }
+
+    function autoDetectAndProcess(rows, fileName) {
+      if (!rows.length) throw new Error('A planilha está vazia.');
+      const headers = Object.keys(rows[0]).map(normalizeKey);
+      const isAnalise = headers.some(h => h.includes('fase') || h.includes('notificad') || h.includes('prazo da analise'));
+
+      if (isAnalise) {
+        processRowsAnalise(rows, fileName, true);
+        switchTab('analise');
+        showNotice(`Planilha carregada na aba "Aguardando Análise" (${DATA_ANALISE.length} registros).`);
+      } else {
+        processRowsAcoes(rows, fileName, true);
+        switchTab('acoes');
+        showNotice(`Planilha carregada na aba "Acompanhamento de Ações" (${DATA.length} registros).`);
+      }
+      updateTabBadges();
+    }
+
+    // ========================================================
+    // ABA 1: LÓGICA DE AÇÕES
+    // ========================================================
+    function processRowsAcoes(rows, fileName, saveStorage = true) {
+      const mapCols = {};
+      Object.keys(rows[0]).forEach(k => { mapCols[normalizeKey(k)] = k; });
+
+      const colCodigo = mapCols['codigo'] || mapCols['cod'];
+      const colResp = mapCols['responsavel'];
+      const colAcao = mapCols['acao'];
+      const colDesc = mapCols['descricao da acao'] || mapCols['descricao'];
+      const colTipo = mapCols['tipo'];
+      const colOcorr = mapCols['ocorrencia'];
+      const colIni = mapCols['data inicio'] || mapCols['inicio'];
+      const colFim = mapCols['data fim'] || mapCols['fim'];
+      const colDias = mapCols['dias restantes'];
+
+      if (!colCodigo || !colAcao) throw new Error('Colunas essenciais ("Código" e "Ação") não encontradas.');
+
+      DATA = rows.map(r => {
+        const dFim = formatDate(r[colFim]);
+        const dias = calculateDaysRemaining(dFim, r[colDias]);
+        const respAcao = String(r[colResp] || '').trim();
+        const codAcao = r[colCodigo] ?? '';
+
+        let status = 'No prazo';
+        if (dias < 0) status = 'Atrasada';
+        else if (dias <= 30) status = 'Vencendo (0–30 dias)';
+
+        return {
+          'Código': codAcao,
+          'Responsável': respAcao,
+          'Ação': String(r[colAcao] ?? '').trim(),
+          'Descrição da Ação': String(r[colDesc] ?? '').trim(),
+          'Tipo': String(r[colTipo] ?? '').trim() || 'Ações',
+          'Ocorrência': String(r[colOcorr] ?? '').trim(),
+          'Data Início': formatDate(r[colIni]),
+          'Data Fim': dFim,
+          'Dias Restantes': dias ?? 0,
+          'Status': status
+        };
+      });
+
+      RESP = [...new Set(DATA.map(x => x.Responsável).filter(Boolean))].sort();
+      TIPOS = [...new Set(DATA.map(x => x.Tipo).filter(Boolean))].sort();
+      OCORRENCIAS = [...new Set(DATA.map(x => x.Ocorrência).filter(Boolean))].sort();
+      selectedResp.clear();
+      currentKpiMode = null;
+      currentPage = 1;
+
+      setupFiltersAcoes();
+      render();
+
+      $('fileName').textContent = fileName;
+      const nowStr = 'Atualizado em ' + new Date().toLocaleString('pt-BR');
+      $('lastUpdate').textContent = nowStr;
+
+      if (saveStorage) {
+        try { localStorage.setItem(STORAGE_KEY_ACOES, JSON.stringify({ fileName, lastUpdate: nowStr, rows })); } catch(e) {}
+      }
+    }
+
+    function setupFiltersAcoes() {
+      const sTipo = $('tipo');
+      sTipo.innerHTML = '<option value="">Todos os tipos</option>';
+      TIPOS.forEach(v => { const o = document.createElement('option'); o.value = v; o.textContent = v; sTipo.appendChild(o); });
+
+      const sOcorr = $('ocorrencia');
+      sOcorr.innerHTML = '<option value="">Todas as ocorrências</option>';
+      OCORRENCIAS.forEach(v => { const o = document.createElement('option'); o.value = v; o.textContent = v; sOcorr.appendChild(o); });
+
+      drawChosen();
+    }
+
+    function setKpiFilter(mode) {
+      if (mode === 'total') { currentKpiMode = null; $('status').value = ''; }
+      else if (mode === currentKpiMode) { currentKpiMode = null; if (['Atrasada', 'Vencendo (0–30 dias)', 'No prazo'].includes(mode)) $('status').value = ''; }
+      else { currentKpiMode = mode; if (['Atrasada', 'Vencendo (0–30 dias)', 'No prazo'].includes(mode)) $('status').value = mode; }
+      currentPage = 1; render();
+    }
+
+    function filterByOcorrencia(ocorr) {
+      $('ocorrencia').value = ocorr;
+      currentPage = 1;
+      render();
+    }
+
+    function showPeople() {
+      const q = $('respSearch').value.toLowerCase().trim();
+      const box = $('results');
+      const arr = RESP.filter(x => x.toLowerCase().includes(q)).slice(0, 60);
+
+      box.innerHTML = arr.length
+        ? arr.map(x => `<div class="person" data-name="${esc(x)}">${esc(x)}${selectedResp.has(x) ? ' <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="display:inline-block;vertical-align:-1px;margin-left:4px;"><polyline points="20 6 9 17 4 12"></polyline></svg>' : ''}</div>`).join('')
+        : '<div class="person" style="color:#94a3b8;">Nenhum responsável encontrado.</div>';
+
+      box.classList.add('open');
+      box.querySelectorAll('.person[data-name]').forEach(e => {
+        e.onmousedown = ev => {
+          ev.preventDefault();
+          const n = e.dataset.name;
+          if (!selectedResp.has(n)) {
+            selectedResp.add(n);
+            $('respSearch').value = '';
+            drawChosen(); currentPage = 1; render(); showPeople(); $('respSearch').focus();
+          }
+        };
+      });
+    }
+
+    function drawChosen() {
+      const b = $('chosen');
+      b.innerHTML = '';
+      if (!selectedResp.size) {
+        b.innerHTML = '<span class="sub" style="line-height:26px;">Nenhum responsável selecionado</span>';
+        return;
+      }
+      selectedResp.forEach(n => {
+        const s = document.createElement('span'); s.className = 'chip'; s.textContent = n + ' ';
+        const x = document.createElement('button'); x.textContent = '×';
+        x.onclick = () => { selectedResp.delete(n); drawChosen(); currentPage = 1; render(); showPeople(); };
+        s.appendChild(x); b.appendChild(s);
+      });
+    }
+
+    function renderActiveFilterBadges() {
+      const bar = $('activeFilters');
+      bar.innerHTML = '';
+      if (currentKpiMode === 'semresp') bar.innerHTML += `<span class="filter-tag">Sem Responsável <button onclick="setKpiFilter('semresp')">×</button></span>`;
+      if ($('status').value) bar.innerHTML += `<span class="filter-tag">Status: ${esc($('status').value)} <button onclick="$('status').value=''; currentKpiMode=null; currentPage=1; render();">×</button></span>`;
+      if ($('ocorrencia').value) bar.innerHTML += `<span class="filter-tag">Ocorrência: ${esc($('ocorrencia').value)} <button onclick="$('ocorrencia').value=''; currentPage=1; render();">×</button></span>`;
+      if ($('tipo').value) bar.innerHTML += `<span class="filter-tag">Tipo: ${esc($('tipo').value)} <button onclick="$('tipo').value=''; currentPage=1; render();">×</button></span>`;
+      if (selectedResp.size) bar.innerHTML += `<span class="filter-tag">${selectedResp.size} Responsável(is) <button onclick="selectedResp.clear(); drawChosen(); currentPage=1; render();">×</button></span>`;
+    }
+
+    function sortTable(column) {
+      if (sortColumn === column) sortAsc = !sortAsc; else { sortColumn = column; sortAsc = true; }
+      render();
+    }
+
+    function updateSortIcons() {
+      ['Código', 'Status', 'Responsável', 'Ação', 'Ocorrência', 'Data Início', 'Data Fim', 'Dias Restantes'].forEach(col => {
+        const iconEl = $(`sort-${col}`);
+        if (iconEl) iconEl.textContent = sortColumn === col ? (sortAsc ? '▲' : '▼') : '';
+      });
+    }
+
+    function render() {
+      const fTipo = $('tipo').value;
+      const fStatus = $('status').value;
+      const fOcorr = $('ocorrencia').value;
+      const fBusca = $('busca').value.toLowerCase().trim();
+
+      document.querySelectorAll('#viewAcoes .kpi').forEach(el => el.classList.remove('active'));
+      if (currentKpiMode === 'semresp') $('kpi-semresp').classList.add('active');
+      else if (fStatus === 'Atrasada') $('kpi-atrasadas').classList.add('active');
+      else if (fStatus === 'Vencendo (0–30 dias)') $('kpi-vencendo').classList.add('active');
+      else if (fStatus === 'No prazo') $('kpi-noprazo').classList.add('active');
+      else if (!fStatus && !currentKpiMode) $('kpi-total').classList.add('active');
+
+      const filtered = DATA.filter(x => {
+        if (selectedResp.size && !selectedResp.has(x.Responsável)) return false;
+        if (currentKpiMode === 'semresp' && x.Responsável !== '') return false;
+        if (fStatus && x.Status !== fStatus) return false;
+        if (fOcorr && x.Ocorrência !== fOcorr) return false;
+        if (fTipo && x.Tipo !== fTipo) return false;
+        if (fBusca) {
+          const txt = `${x.Código} ${x.Ação} ${x.Ocorrência} ${x.Responsável} ${x['Descrição da Ação']}`.toLowerCase();
+          if (!txt.includes(fBusca)) return false;
+        }
+        return true;
+      });
+
+      filtered.sort((a, b) => {
+        let valA = a[sortColumn]; let valB = b[sortColumn];
+        if (sortColumn === 'Dias Restantes' || sortColumn === 'Código') {
+          valA = Number(valA) || 0; valB = Number(valB) || 0;
+        } else {
+          valA = String(valA || '').toLowerCase(); valB = String(valB || '').toLowerCase();
+        }
+        if (valA < valB) return sortAsc ? -1 : 1;
+        if (valA > valB) return sortAsc ? 1 : -1;
+        return 0;
+      });
+
+      lastFilteredData = filtered;
+
+      const baseForKpis = DATA.filter(x => {
+        if (selectedResp.size && !selectedResp.has(x.Responsável)) return false;
+        if (fOcorr && x.Ocorrência !== fOcorr) return false;
+        if (fTipo && x.Tipo !== fTipo) return false;
+        if (fBusca) {
+          const txt = `${x.Código} ${x.Ação} ${x.Ocorrência} ${x.Responsável} ${x['Descrição da Ação']}`.toLowerCase();
+          if (!txt.includes(fBusca)) return false;
+        }
+        return true;
+      });
+
+      $('total').textContent = baseForKpis.length;
+      $('atrasadas').textContent = baseForKpis.filter(x => x.Status === 'Atrasada').length;
+      $('vencendo').textContent = baseForKpis.filter(x => x.Status === 'Vencendo (0–30 dias)').length;
+      $('noprazo').textContent = baseForKpis.filter(x => x.Status === 'No prazo').length;
+      $('semresp').textContent = baseForKpis.filter(x => !x.Responsável).length;
+      $('count').textContent = `Exibindo ${filtered.length} de ${DATA.length} ações`;
+
+      renderActiveFilterBadges();
+      updateSortIcons();
+
+      const totalRows = filtered.length;
+      let displayRows = filtered;
+      if (pageSize !== 'all') {
+        const numSize = Number(pageSize);
+        const maxPage = Math.max(1, Math.ceil(totalRows / numSize));
+        if (currentPage > maxPage) currentPage = maxPage;
+        const start = (currentPage - 1) * numSize;
+        displayRows = filtered.slice(start, start + numSize);
+        $('pageInfo').textContent = `Página ${currentPage} de ${maxPage} (${totalRows} itens)`;
+        $('btnPrevPage').disabled = (currentPage <= 1);
+        $('btnNextPage').disabled = (currentPage >= maxPage);
+      } else {
+        $('pageInfo').textContent = `Mostrando todas as ${totalRows} ações`;
+        $('btnPrevPage').disabled = true;
+        $('btnNextPage').disabled = true;
+      }
+
+      const tbody = $('tbody');
+      if (displayRows.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:36px; color:#94a3b8; font-weight:500;">Nenhum registro encontrado com os filtros atuais.</td></tr>`;
+      } else {
+        tbody.innerHTML = displayRows.map(x => {
+          let badgeClass = 'green';
+          if (x.Status === 'Atrasada') badgeClass = 'red';
+          else if (x.Status === 'Vencendo (0–30 dias)') badgeClass = 'yellow';
+
+          return `<tr>
+            <td>
+              <a href="${URL_EPA_GERAL_OCORRENCIAS}" target="_blank" rel="noopener noreferrer" class="link-codigo" title="Acessar painel geral de ocorrências no EPA">
+                ${esc(x.Código)}
+                <svg viewBox="0 0 24 24"><path d="M14 3h7v7h-2V6.414l-9.293 9.293-1.414-1.414L17.586 5H14V3zM5 5h6V3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-6h-2v6H5V5z"/></svg>
+              </a>
+            </td>
+            <td><span class="badge ${badgeClass}" onclick="$('status').value='${esc(x.Status)}'; setKpiFilter('${esc(x.Status)}')">${esc(x.Status)}</span></td>
+            <td><strong>${esc(x.Responsável || '—')}</strong></td>
+            <td class="action-cell" onclick="openModal('${esc(x.Código)}')"><span>${esc(x.Ação)}</span></td>
+            <td><span class="link-ocorr" onclick="filterByOcorrencia('${esc(x.Ocorrência)}')">${esc(x.Ocorrência)}</span></td>
+            <td>${esc(x['Data Início'])}</td>
+            <td>${esc(x['Data Fim'])}</td>
+            <td><strong>${x['Dias Restantes']}</strong></td>
+          </tr>`;
+        }).join('');
+      }
+
+      renderCharts(filtered);
+    }
+
+    function prevPage() { if (currentPage > 1) { currentPage--; render(); } }
+    function nextPage() { currentPage++; render(); }
+    function changePageSize(val) { pageSize = val === 'all' ? 'all' : Number(val); currentPage = 1; render(); }
+
+    function openModal(codigo) {
+      const item = DATA.find(x => String(x.Código) === String(codigo));
+      if (!item) return;
+
+      $('modalCodigo').textContent = '#' + item.Código;
+      $('modalTitle').textContent = item.Ação;
+      $('modalResp').textContent = item.Responsável || 'Não atribuído';
+      $('modalOcorr').textContent = item.Ocorrência;
+      $('modalTipo').textContent = item.Tipo;
+      $('modalFim').textContent = item['Data Fim'];
+      $('modalDias').textContent = item['Dias Restantes'];
+      $('modalDesc').textContent = item['Descrição da Ação'] || 'Sem descrição cadastrada.';
+
+      const badge = $('modalBadge');
+      badge.textContent = item.Status;
+      badge.className = 'badge ' + (item.Status === 'Atrasada' ? 'red' : item.Status === 'Vencendo (0–30 dias)' ? 'yellow' : 'green');
+
+      $('modalBackdrop').classList.add('open');
+    }
+
+    function closeModal(evt) {
+      if (!evt || evt.target.id === 'modalBackdrop' || evt.target.className === 'modal-close' || evt.target.innerText === 'Fechar') {
+        $('modalBackdrop').classList.remove('open');
+      }
+    }
+
+    // Fechar modal com a tecla ESC
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        $('modalBackdrop').classList.remove('open');
+      }
+    });
+
+    function renderCharts(records) {
+      const statusLabels = ['Atrasada', 'Vencendo (0–30 dias)', 'No prazo'];
+      const statusData = statusLabels.map(s => records.filter(x => x.Status === s).length);
+
+      if (chart1) chart1.destroy();
+      chart1 = new Chart($('chartStatus'), {
+        type: 'doughnut',
+        data: {
+          labels: statusLabels,
+          datasets: [{ data: statusData, backgroundColor: ['#dc2626', '#f59e0b', '#2d774f'], borderWidth: 2, borderColor: '#ffffff' }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom', labels: { font: { family: "'Plus Jakarta Sans', sans-serif", weight: '600' } } } },
+          onClick: (evt, elements) => {
+            if (elements.length > 0) {
+              const selectedStatus = statusLabels[elements[0].index];
+              $('status').value = selectedStatus; setKpiFilter(selectedStatus);
+            }
+          }
+        }
+      });
+
+      const tipos = [...new Set(records.map(x => x.Tipo).filter(Boolean))];
+      const tipoData = tipos.map(t => records.filter(x => x.Tipo === t).length);
+
+      if (chart2) chart2.destroy();
+      chart2 = new Chart($('chartTipo'), {
+        type: 'bar',
+        data: {
+          labels: tipos,
+          datasets: [{ label: 'Registros', data: tipoData, backgroundColor: '#a7cf44', borderRadius: 8, hoverBackgroundColor: '#8cb52f' }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: '#eef2ef' } }, x: { grid: { display: false } } }
+        }
+      });
+
+      const respCounts = {};
+      records.forEach(r => { if (r.Responsável) respCounts[r.Responsável] = (respCounts[r.Responsável] || 0) + 1; });
+      const sortedResp = Object.entries(respCounts).sort((a, b) => b[1] - a[1]).slice(0, 7);
+
+      if (chart3) chart3.destroy();
+      chart3 = new Chart($('chartResp'), {
+        type: 'bar',
+        data: {
+          labels: sortedResp.map(x => x[0]),
+          datasets: [{ label: 'Ações Pendentes', data: sortedResp.map(x => x[1]), backgroundColor: '#38855d', borderRadius: 6 }]
+        },
+        options: {
+          indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: '#eef2ef' } },
+            y: { grid: { display: false }, ticks: { font: { size: 11, weight: '600' } } }
+          }
+        }
+      });
+    }
+
+    // =========================================================================
+    // ABA 2: LÓGICA DE OCORRÊNCIAS AGUARDANDO ANÁLISE
+    // =========================================================================
+    function processRowsAnalise(rows, fileName, saveStorage = true) {
+      const mapCols = {};
+      Object.keys(rows[0]).forEach(k => { mapCols[normalizeKey(k)] = k; });
+
+      const colCodigo = mapCols['codigo'] || mapCols['cod'];
+      const colResp = mapCols['responsavel'];
+      const colNotificadora = mapCols['unidade notificadora'];
+      const colNotificada = mapCols['unidade notificada'];
+      const colAcao = mapCols['acao'] || mapCols['ocorrencia'];
+      const colFase = mapCols['fase'];
+      const colPrazo = mapCols['prazo da analise'] || mapCols['prazo'];
+      const colDias = mapCols['dias de atraso'] || mapCols['dias restantes'];
+
+      if (!colCodigo) throw new Error('Coluna "Código" não encontrada na planilha.');
+
+      DATA_ANALISE = rows.map(r => {
+        const prazoStr = formatDate(r[colPrazo]);
+        const dias = calculateDaysRemaining(prazoStr, r[colDias]);
+        const resp = String(r[colResp] || '').trim();
+        const fase = String(r[colFase] || '').trim();
+
+        let statusAnalise = 'Sem prazo';
+        if (dias !== null) {
+          if (dias < 0) statusAnalise = 'Atrasada';
+          else if (dias <= 30) statusAnalise = 'Vencendo (0–30 dias)';
+          else statusAnalise = 'No prazo';
+        }
+
+        return {
+          'Código': r[colCodigo] ?? '',
+          'Responsável': resp,
+          'Unidade Notificadora': String(r[colNotificadora] || '').trim(),
+          'Unidade Notificada': String(r[colNotificada] || '').trim(),
+          'Ação': String(r[colAcao] || '').trim(),
+          'Fase': fase,
+          'Prazo da Análise': prazoStr,
+          'Dias de Atraso': dias,
+          'Status': statusAnalise
+        };
+      });
+
+      RESP_ANALISE = [...new Set(DATA_ANALISE.map(x => x.Responsável).filter(Boolean))].sort();
+      FASES_ANALISE = [...new Set(DATA_ANALISE.map(x => x.Fase).filter(Boolean))].sort();
+      NOTIFICADAS_ANALISE = [...new Set(DATA_ANALISE.map(x => x['Unidade Notificada']).filter(Boolean))].sort();
+      
+      selectedRespAnalise.clear();
+      selectedNotificadas.clear();
+      currentKpiModeAnalise = null;
+      curPageAnalise = 1;
+
+      setupFiltersAnalise();
+      renderAnalise();
+
+      $('fileName').textContent = fileName;
+      const nowStr = 'Atualizado em ' + new Date().toLocaleString('pt-BR');
+      $('lastUpdate').textContent = nowStr;
+
+      if (saveStorage) {
+        try { localStorage.setItem(STORAGE_KEY_ANALISE, JSON.stringify({ fileName, lastUpdate: nowStr, rows })); } catch(e) {}
+      }
+    }
+
+    function setupFiltersAnalise() {
+      const sAnalista = $('analistaSelect');
+      sAnalista.innerHTML = '<option value="">Todos os analistas</option>';
+      Object.keys(SECTORS_ANALYSTS_MAP).sort().forEach(an => {
+        const o = document.createElement('option');
+        o.value = an; o.textContent = an;
+        sAnalista.appendChild(o);
+      });
+
+      populateSetoresDropdown("");
+
+      const sFase = $('faseAnalise');
+      sFase.innerHTML = '<option value="">Todas as fases</option>';
+      FASES_ANALISE.forEach(v => {
+        const o = document.createElement('option');
+        o.value = v; o.textContent = v;
+        sFase.appendChild(o);
+      });
+
+      drawChosenAnalise();
+      drawChosenNotificadas();
+    }
+
+    function populateSetoresDropdown(analista) {
+      const sSetor = $('setorSelect');
+      sSetor.innerHTML = '<option value="">Todos os setores</option>';
+
+      let availableSectors = [];
+      if (analista && SECTORS_ANALYSTS_MAP[analista]) {
+        availableSectors = SECTORS_ANALYSTS_MAP[analista];
+      } else {
+        availableSectors = Object.keys(SECTORS_ANALYSTS_MAP).flatMap(k => SECTORS_ANALYSTS_MAP[k]);
+      }
+
+      [...new Set(availableSectors)].sort().forEach(sec => {
+        const o = document.createElement('option');
+        o.value = sec; o.textContent = sec;
+        sSetor.appendChild(o);
+      });
+    }
+
+    function onAnalistaChange(analista) {
+      currentAnalista = analista;
+      currentSetor = "";
+      populateSetoresDropdown(analista);
+      curPageAnalise = 1;
+      renderAnalise();
+    }
+
+    function onSetorChange(setor) {
+      currentSetor = setor;
+      curPageAnalise = 1;
+      renderAnalise();
+    }
+
+    function showNotificadasSearch() {
+      const q = $('notificadaSearch').value.toLowerCase().trim();
+      const box = $('resultsNotificada');
+      const arr = NOTIFICADAS_ANALISE.filter(x => x.toLowerCase().includes(q)).slice(0, 60);
+
+      box.innerHTML = arr.length
+        ? arr.map(x => `<div class="item-select" data-notif="${esc(x)}">${esc(x)}${selectedNotificadas.has(x) ? ' <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="display:inline-block;vertical-align:-1px;margin-left:4px;"><polyline points="20 6 9 17 4 12"></polyline></svg>' : ''}</div>`).join('')
+        : '<div class="item-select" style="color:#94a3b8;">Nenhuma unidade encontrada.</div>';
+
+      box.classList.add('open');
+      box.querySelectorAll('.item-select[data-notif]').forEach(e => {
+        e.onmousedown = ev => {
+          ev.preventDefault();
+          const n = e.dataset.notif;
+          if (!selectedNotificadas.has(n)) {
+            selectedNotificadas.add(n);
+            $('notificadaSearch').value = '';
+            drawChosenNotificadas();
+            curPageAnalise = 1;
+            renderAnalise();
+            showNotificadasSearch();
+            $('notificadaSearch').focus();
+          }
+        };
+      });
+    }
+
+    function drawChosenNotificadas() {
+      const b = $('chosenNotificada');
+      b.innerHTML = '';
+      if (!selectedNotificadas.size) {
+        b.innerHTML = '<span class="sub" style="line-height:26px;">Todas as unidades</span>';
+        return;
+      }
+      selectedNotificadas.forEach(n => {
+        const s = document.createElement('span'); s.className = 'chip'; s.textContent = n + ' ';
+        const x = document.createElement('button'); x.textContent = '×';
+        x.onclick = () => {
+          selectedNotificadas.delete(n);
+          drawChosenNotificadas();
+          curPageAnalise = 1;
+          renderAnalise();
+          showNotificadasSearch();
+        };
+        s.appendChild(x); b.appendChild(s);
+      });
+    }
+
+    function clearNotificadas() {
+      selectedNotificadas.clear();
+      drawChosenNotificadas();
+      curPageAnalise = 1;
+      renderAnalise();
+    }
+
+    function showPeopleAnalise() {
+      const q = $('respSearchAnalise').value.toLowerCase().trim();
+      const box = $('resultsAnalise');
+      const arr = RESP_ANALISE.filter(x => x.toLowerCase().includes(q)).slice(0, 60);
+
+      box.innerHTML = arr.length
+        ? arr.map(x => `<div class="person" data-name="${esc(x)}">${esc(x)}${selectedRespAnalise.has(x) ? ' <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="display:inline-block;vertical-align:-1px;margin-left:4px;"><polyline points="20 6 9 17 4 12"></polyline></svg>' : ''}</div>`).join('')
+        : '<div class="person" style="color:#94a3b8;">Nenhum responsável encontrado.</div>';
+
+      box.classList.add('open');
+      box.querySelectorAll('.person[data-name]').forEach(e => {
+        e.onmousedown = ev => {
+          ev.preventDefault();
+          const n = e.dataset.name;
+          if (!selectedRespAnalise.has(n)) {
+            selectedRespAnalise.add(n);
+            $('respSearchAnalise').value = '';
+            drawChosenAnalise();
+            curPageAnalise = 1;
+            renderAnalise();
+            showPeopleAnalise();
+            $('respSearchAnalise').focus();
+          }
+        };
+      });
+    }
+
+    function drawChosenAnalise() {
+      const b = $('chosenAnalise');
+      b.innerHTML = '';
+      if (!selectedRespAnalise.size) {
+        b.innerHTML = '<span class="sub" style="line-height:26px;">Todos os responsáveis</span>';
+        return;
+      }
+      selectedRespAnalise.forEach(n => {
+        const s = document.createElement('span'); s.className = 'chip'; s.textContent = n + ' ';
+        const x = document.createElement('button'); x.textContent = '×';
+        x.onclick = () => {
+          selectedRespAnalise.delete(n);
+          drawChosenAnalise();
+          curPageAnalise = 1;
+          renderAnalise();
+          showPeopleAnalise();
+        };
+        s.appendChild(x); b.appendChild(s);
+      });
+    }
+
+    function setKpiFilterAnalise(mode) {
+      if (mode === 'total') currentKpiModeAnalise = null;
+      else if (mode === currentKpiModeAnalise) currentKpiModeAnalise = null;
+      else currentKpiModeAnalise = mode;
+      curPageAnalise = 1;
+      renderAnalise();
+    }
+
+    function renderActiveFilterBadgesAnalise() {
+      const bar = $('activeFiltersAnalise');
+      bar.innerHTML = '';
+
+      if (currentAnalista) {
+        bar.innerHTML += `<span class="filter-tag">Analista: ${esc(currentAnalista)} <button onclick="$('analistaSelect').value=''; onAnalistaChange('');">×</button></span>`;
+      }
+      if (currentSetor) {
+        bar.innerHTML += `<span class="filter-tag">Setor: ${esc(currentSetor)} <button onclick="$('setorSelect').value=''; onSetorChange('');">×</button></span>`;
+      }
+      if (selectedNotificadas.size) {
+        bar.innerHTML += `<span class="filter-tag">${selectedNotificadas.size} Unidade(s) Notificada(s) <button onclick="clearNotificadas()">×</button></span>`;
+      }
+      if (currentKpiModeAnalise === 'semresp') {
+        bar.innerHTML += `<span class="filter-tag">Sem Responsável <button onclick="setKpiFilterAnalise('semresp')">×</button></span>`;
+      } else if (currentKpiModeAnalise === 'atrasadas') {
+        bar.innerHTML += `<span class="filter-tag">Atrasadas <button onclick="setKpiFilterAnalise('atrasadas')">×</button></span>`;
+      } else if (currentKpiModeAnalise === 'fase1') {
+        bar.innerHTML += `<span class="filter-tag">Fase 1 <button onclick="setKpiFilterAnalise('fase1')">×</button></span>`;
+      } else if (currentKpiModeAnalise === 'fase3') {
+        bar.innerHTML += `<span class="filter-tag">Fase 3 <button onclick="setKpiFilterAnalise('fase3')">×</button></span>`;
+      } else if (currentKpiModeAnalise === 'fase5') {
+        bar.innerHTML += `<span class="filter-tag">Fase 5 <button onclick="setKpiFilterAnalise('fase5')">×</button></span>`;
+      }
+      if ($('faseAnalise').value) {
+        bar.innerHTML += `<span class="filter-tag">Fase: ${esc($('faseAnalise').value)} <button onclick="$('faseAnalise').value=''; renderAnalise();">×</button></span>`;
+      }
+      if (selectedRespAnalise.size) {
+        bar.innerHTML += `<span class="filter-tag">${selectedRespAnalise.size} Responsável(is) <button onclick="selectedRespAnalise.clear(); drawChosenAnalise(); renderAnalise();">×</button></span>`;
+      }
+    }
+
+    function sortTableAnalise(column) {
+      if (sortColAnalise === column) sortAscAnalise = !sortAscAnalise;
+      else { sortColAnalise = column; sortAscAnalise = true; }
+      renderAnalise();
+    }
+
+    function updateSortIconsAnalise() {
+      ['Código', 'Fase', 'Responsável', 'Ação', 'Unidade Notificada', 'Unidade Notificadora', 'Prazo da Análise', 'Dias de Atraso'].forEach(col => {
+        const iconEl = $(`sort-an-${col}`);
+        if (iconEl) iconEl.textContent = sortColAnalise === col ? (sortAscAnalise ? '▲' : '▼') : '';
+      });
+    }
+
+    function checkUnidadeMatchesSetor(unidade, setorNome, analistaNome) {
+      if (!unidade || !setorNome) return false;
+      const u = normalizeKey(unidade);
+      const s = normalizeKey(setorNome);
+
+      if (analistaNome === "Abraao" || s.includes("ti") || s.includes("sistemas") || s.includes("service desk")) {
+        if (u.includes("eng. manutencao") || u.includes("obras") || u.includes("manutencao predial") || u.includes("suprimentos") || u.includes("hospital")) {
+          return false;
+        }
+        const wordsU = u.replace(/[\/\-\.\,]/g, ' ').split(/\s+/);
+        const hasTI = wordsU.includes("ti") || u.includes("tecnologia") || u.includes("service desk") || u.includes("sistemas administrativos") || u.includes("seguranca da informacao") || u.includes("operabilidade ti");
+        return hasTI;
+      }
+
+      if (u.includes(s) || s.includes(u)) return true;
+      const words = s.replace(/[\(\)\-\,\/]/g, ' ').split(/\s+/).filter(w => w.length > 3);
+      return words.length > 0 && words.some(w => u.includes(w));
+    }
+
+    function renderAnalise() {
+      const fFase = $('faseAnalise').value;
+      const fBusca = $('buscaAnalise').value.toLowerCase().trim();
+
+      document.querySelectorAll('#viewAnalise .kpi').forEach(el => el.classList.remove('active'));
+      if (currentKpiModeAnalise === 'semresp') $('kpi-an-semresp').classList.add('active');
+      else if (currentKpiModeAnalise === 'atrasadas') $('kpi-an-atrasadas').classList.add('active');
+      else if (currentKpiModeAnalise === 'fase1') $('kpi-an-fase1').classList.add('active');
+      else if (currentKpiModeAnalise === 'fase3') $('kpi-an-fase3').classList.add('active');
+      else if (currentKpiModeAnalise === 'fase5') $('kpi-an-fase5').classList.add('active');
+      else if (!currentKpiModeAnalise) $('kpi-an-total').classList.add('active');
+
+      const analistaSectors = currentAnalista && SECTORS_ANALYSTS_MAP[currentAnalista] ? SECTORS_ANALYSTS_MAP[currentAnalista] : [];
+
+      const filtered = DATA_ANALISE.filter(x => {
+        if (currentAnalista && analistaSectors.length) {
+          const matchAny = analistaSectors.some(sec => checkUnidadeMatchesSetor(x['Unidade Notificada'], sec, currentAnalista));
+          if (!matchAny) return false;
+        }
+        if (currentSetor) {
+          if (!checkUnidadeMatchesSetor(x['Unidade Notificada'], currentSetor, currentAnalista)) return false;
+        }
+        if (selectedNotificadas.size && !selectedNotificadas.has(x['Unidade Notificada'])) return false;
+        if (selectedRespAnalise.size && !selectedRespAnalise.has(x.Responsável)) return false;
+
+        if (currentKpiModeAnalise === 'semresp' && x.Responsável !== '') return false;
+        if (currentKpiModeAnalise === 'atrasadas' && (x['Dias de Atraso'] === null || x['Dias de Atraso'] >= 0)) return false;
+        if (currentKpiModeAnalise === 'fase1' && !x.Fase.startsWith('1')) return false;
+        if (currentKpiModeAnalise === 'fase3' && !x.Fase.startsWith('3')) return false;
+        if (currentKpiModeAnalise === 'fase5' && !x.Fase.startsWith('5')) return false;
+
+        if (fFase && x.Fase !== fFase) return false;
+
+        if (fBusca) {
+          const txt = `${x.Código} ${x.Ação} ${x.Responsável} ${x['Unidade Notificada']} ${x['Unidade Notificadora']} ${x.Fase}`.toLowerCase();
+          if (!txt.includes(fBusca)) return false;
+        }
+        return true;
+      });
+
+      filtered.sort((a, b) => {
+        let valA = a[sortColAnalise];
+        let valB = b[sortColAnalise];
+        if (sortColAnalise === 'Dias de Atraso' || sortColAnalise === 'Código') {
+          valA = valA === null ? -999999 : Number(valA);
+          valB = valB === null ? -999999 : Number(valB);
+        } else {
+          valA = String(valA || '').toLowerCase();
+          valB = String(valB || '').toLowerCase();
+        }
+        if (valA < valB) return sortAscAnalise ? -1 : 1;
+        if (valA > valB) return sortAscAnalise ? 1 : -1;
+        return 0;
+      });
+
+      lastFilteredDataAnalise = filtered;
+
+      const baseKpis = DATA_ANALISE.filter(x => {
+        if (currentAnalista && analistaSectors.length) {
+          const matchAny = analistaSectors.some(sec => checkUnidadeMatchesSetor(x['Unidade Notificada'], sec, currentAnalista));
+          if (!matchAny) return false;
+        }
+        if (currentSetor && !checkUnidadeMatchesSetor(x['Unidade Notificada'], currentSetor, currentAnalista)) return false;
+        if (selectedNotificadas.size && !selectedNotificadas.has(x['Unidade Notificada'])) return false;
+        if (selectedRespAnalise.size && !selectedRespAnalise.has(x.Responsável)) return false;
+        if (fBusca) {
+          const txt = `${x.Código} ${x.Ação} ${x.Responsável} ${x['Unidade Notificada']} ${x['Unidade Notificadora']}`.toLowerCase();
+          if (!txt.includes(fBusca)) return false;
+        }
+        return true;
+      });
+
+      $('an-total').textContent = baseKpis.length;
+      $('an-fase1').textContent = baseKpis.filter(x => x.Fase.startsWith('1')).length;
+      $('an-fase3').textContent = baseKpis.filter(x => x.Fase.startsWith('3')).length;
+      $('an-fase5').textContent = baseKpis.filter(x => x.Fase.startsWith('5')).length;
+      $('an-atrasadas').textContent = baseKpis.filter(x => x['Dias de Atraso'] !== null && x['Dias de Atraso'] < 0).length;
+      $('an-semresp').textContent = baseKpis.filter(x => !x.Responsável).length;
+
+      $('countAnalise').textContent = `Exibindo ${filtered.length} de ${DATA_ANALISE.length} ocorrências`;
+
+      renderActiveFilterBadgesAnalise();
+      updateSortIconsAnalise();
+
+      const totalRows = filtered.length;
+      let displayRows = filtered;
+      if (pSizeAnalise !== 'all') {
+        const numSize = Number(pSizeAnalise);
+        const maxPage = Math.max(1, Math.ceil(totalRows / numSize));
+        if (curPageAnalise > maxPage) curPageAnalise = maxPage;
+        const start = (curPageAnalise - 1) * numSize;
+        displayRows = filtered.slice(start, start + numSize);
+
+        $('pageInfoAnalise').textContent = `Página ${curPageAnalise} de ${maxPage} (${totalRows} itens)`;
+        $('btnPrevPageAnalise').disabled = (curPageAnalise <= 1);$('btnNextPageAnalise').disabled = (curPageAnalise >= maxPage);
+      } else {
+        $('pageInfoAnalise').textContent = `Mostrando todas as ${totalRows} ocorrências`;
+        $('btnPrevPageAnalise').disabled = true;
+        $('btnNextPageAnalise').disabled = true;
+      }
+
+      const tbody = $('tbodyAnalise');
+      if (displayRows.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:36px; color:#94a3b8; font-weight:500;">Nenhuma ocorrência encontrada com os filtros atuais.</td></tr>`;
+      } else {
+        tbody.innerHTML = displayRows.map(x => {
+          let badgeClass = 'green';
+          let badgeText = x.Status;
+          if (x.Status === 'Atrasada') badgeClass = 'red';
+          else if (x.Status === 'Vencendo (0–30 dias)') badgeClass = 'yellow';
+          else if (x.Status === 'Sem prazo') { badgeClass = 'gray'; badgeText = 'Sem prazo'; }
+
+          let faseBadgeClass = 'blue';
+          if (x.Fase.startsWith('3')) faseBadgeClass = 'purple';
+          if (x.Fase.startsWith('5')) faseBadgeClass = 'green';
+
+          const linkUrl = BASE_URL_OCORRENCIA_TAB2 + encodeURIComponent(x.Código);
+
+          return `<tr>
+            <td>
+              <a href="${linkUrl}" target="_blank" rel="noopener noreferrer" class="link-codigo" title="Abrir ocorrência ${esc(x.Código)} no EPA">
+                ${esc(x.Código)}
+                <svg viewBox="0 0 24 24"><path d="M14 3h7v7h-2V6.414l-9.293 9.293-1.414-1.414L17.586 5H14V3zM5 5h6V3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-6h-2v6H5V5z"/></svg>
+              </a>
+            </td>
+            <td><span class="badge ${faseBadgeClass}" onclick="$('faseAnalise').value='${esc(x.Fase)}'; curPageAnalise=1; renderAnalise();">${esc(x.Fase)}</span></td>
+            <td><strong>${esc(x.Responsável || '—')}</strong></td>
+            <td><span title="${esc(x.Ação)}">${esc(x.Ação)}</span></td>
+            <td><strong style="color:var(--primary); cursor:pointer;" onclick="toggleNotificadaFromTable('${esc(x['Unidade Notificada'])}')">${esc(x['Unidade Notificada'])}</strong></td>
+            <td>${esc(x['Unidade Notificadora'])}</td>
+            <td>${esc(x['Prazo da Análise'] || '—')}</td>
+            <td><span class="badge ${badgeClass}">${x['Dias de Atraso'] !== null ? x['Dias de Atraso'] : '—'}</span></td>
+          </tr>`;
+        }).join('');
+      }
+
+      renderChartsAnalise(filtered);
+    }
+
+    function toggleNotificadaFromTable(unidade) {
+      if (!unidade) return;
+      if (selectedNotificadas.has(unidade)) selectedNotificadas.delete(unidade);
+      else selectedNotificadas.add(unidade);
+      drawChosenNotificadas();
+      curPageAnalise = 1;
+      renderAnalise();
+    }
+
+    function prevPageAnalise() { if (curPageAnalise > 1) { curPageAnalise--; renderAnalise(); } }
+    function nextPageAnalise() { curPageAnalise++; renderAnalise(); }
+    function changePageSizeAnalise(val) { pSizeAnalise = val === 'all' ? 'all' : Number(val); curPageAnalise = 1; renderAnalise(); }
+
+    function renderChartsAnalise(records) {
+      const fases = ['1 - Avaliar Ocorrência', '3 - Validar a Análise da Causa e/ou Plano de Ação', '5 - Validar Execução Ação(ões)'];
+      const faseData = fases.map(f => records.filter(x => x.Fase === f).length);
+
+      if (chartFase) chartFase.destroy();
+      chartFase = new Chart($('chartFase'), {
+        type: 'doughnut',
+        data: {
+          labels: ['Fase 1 (Avaliar)', 'Fase 3 (Validar Causa/Plano)', 'Fase 5 (Validar Execução)'],
+          datasets: [{ data: faseData, backgroundColor: ['#2563eb', '#8b5cf6', '#2d774f'], borderWidth: 2, borderColor: '#ffffff' }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom', labels: { font: { family: "'Plus Jakarta Sans', sans-serif", weight: '600' } } } },
+          onClick: (evt, elements) => {
+            if (elements.length > 0) {
+              const selectedFase = fases[elements[0].index];
+              $('faseAnalise').value = selectedFase;
+              curPageAnalise = 1;
+              renderAnalise();
+            }
+          }
+        }
+      });
+
+      const notifCounts = {};
+      records.forEach(r => {
+        const u = r['Unidade Notificada'];
+        if (u) notifCounts[u] = (notifCounts[u] || 0) + 1;
+      });
+      const topNotif = Object.entries(notifCounts).sort((a, b) => b[1] - a[1]).slice(0, 6);
+
+      if (chartNotificada) chartNotificada.destroy();
+      chartNotificada = new Chart($('chartNotificada'), {
+        type: 'bar',
+        data: {
+          labels: topNotif.map(x => x[0].length > 22 ? x[0].slice(0, 20) + '...' : x[0]),
+          datasets: [{ label: 'Ocorrências', data: topNotif.map(x => x[1]), backgroundColor: '#a7cf44', borderRadius: 6 }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: '#eef2ef' } },
+            x: { grid: { display: false }, ticks: { font: { size: 10.5, weight: '600' } } }
+          }
+        }
+      });
+
+      const respCounts = {};
+      records.forEach(r => {
+        if (r.Responsável) respCounts[r.Responsável] = (respCounts[r.Responsável] || 0) + 1;
+      });
+      const sortedResp = Object.entries(respCounts).sort((a, b) => b[1] - a[1]).slice(0, 7);
+
+      if (chartRespAnalise) chartRespAnalise.destroy();
+      chartRespAnalise = new Chart($('chartRespAnalise'), {
+        type: 'bar',
+        data: {
+          labels: sortedResp.map(x => x[0]),
+          datasets: [{ label: 'Aguardando Análise', data: sortedResp.map(x => x[1]), backgroundColor: '#38855d', borderRadius: 6 }]
+        },
+        options: {
+          indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: '#eef2ef' } },
+            y: { grid: { display: false }, ticks: { font: { size: 11, weight: '600' } } }
+          }
+        }
+      });
+    }
+
+    // ========================================================
+    // EXPORTAÇÕES E RESUMOS
+    // ========================================================
+    $('btnExportExcel').onclick = () => {
+      if (!lastFilteredData.length) return showNotice('Nenhum dado para exportar.', true);
+      const ws = XLSX.utils.json_to_sheet(lastFilteredData.map(x => ({
+        'Código da Ação': x.Código,
+        'Status': x.Status,
+        'Responsável da Ação': x.Responsável,
+        'Ação': x.Ação,
+        'Descrição da Ação': x['Descrição da Ação'],
+        'Ocorrência': x.Ocorrência,
+        'Tipo': x.Tipo,
+        'Data Início': x['Data Início'],
+        'Data Fim': x['Data Fim'],
+        'Dias Restantes': x['Dias Restantes'],
+        'Link EPA Geral': URL_EPA_GERAL_OCORRENCIAS
+      })));
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Ações Filtradas");
+      XLSX.writeFile(wb, `Acoes_MedSenior_${new Date().toISOString().slice(0,10)}.xlsx`);
+      showNotice(`Exportadas ${lastFilteredData.length} ações!`);
+    };
+
+    $('btnExportExcelAnalise').onclick = () => {
+      if (!lastFilteredDataAnalise.length) return showNotice('Nenhum dado para exportar.', true);
+      const ws = XLSX.utils.json_to_sheet(lastFilteredDataAnalise.map(x => ({
+        'Código Ocorrência': x.Código,
+        'Fase': x.Fase,
+        'Responsável': x.Responsável,
+        'Ocorrência / Ação': x.Ação,
+        'Unidade Notificada': x['Unidade Notificada'],
+        'Unidade Notificadora': x['Unidade Notificadora'],
+        'Prazo da Análise': x['Prazo da Análise'],
+        'Dias de Atraso': x['Dias de Atraso'],
+        'Link EPA': BASE_URL_OCORRENCIA_TAB2 + x.Código
+      })));
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Ocorrências Filtradas");
+      XLSX.writeFile(wb, `Aguardando_Analise_MedSenior_${new Date().toISOString().slice(0,10)}.xlsx`);
+      showNotice(`Exportadas ${lastFilteredDataAnalise.length} ocorrências!`);
+    };
+
+    $('btnCopySummary').onclick = () => {
+      if (!lastFilteredData.length) return showNotice('Nenhum dado selecionado.', true);
+      const total = lastFilteredData.length;
+      const atrasadas = lastFilteredData.filter(x => x.Status === 'Atrasada').length;
+      const vencendo = lastFilteredData.filter(x => x.Status === 'Vencendo (0–30 dias)').length;
+      const noPrazo = lastFilteredData.filter(x => x.Status === 'No prazo').length;
+      let respStr = selectedResp.size ? ` | Responsáveis: ${Array.from(selectedResp).join(', ')}` : '';
+
+      const text = `• Resumo Geral de Ações - MedSênior\n` +
+                   `Total de ações filtradas: ${total}${respStr}\n` +
+                   `[-] Atrasadas: ${atrasadas}\n` +
+                   `[!] Vencendo em 30 dias: ${vencendo}\n` +
+                   `[OK] No prazo: ${noPrazo}\n` +
+                   `Gerado em: ${new Date().toLocaleString('pt-BR')}`;
+      navigator.clipboard.writeText(text).then(() => showNotice('Resumo copiado com sucesso!'));
+    };
+
+    $('btnCopySummaryAnalise').onclick = () => {
+      if (!lastFilteredDataAnalise.length) return showNotice('Nenhum dado selecionado.', true);
+      const total = lastFilteredDataAnalise.length;
+      const fase1 = lastFilteredDataAnalise.filter(x => x.Fase.startsWith('1')).length;
+      const fase3 = lastFilteredDataAnalise.filter(x => x.Fase.startsWith('3')).length;
+      const fase5 = lastFilteredDataAnalise.filter(x => x.Fase.startsWith('5')).length;
+      const atrasadas = lastFilteredDataAnalise.filter(x => x['Dias de Atraso'] !== null && x['Dias de Atraso'] < 0).length;
+
+      let extraStr = '';
+      if (currentAnalista) extraStr += ` | Analista: ${currentAnalista}`;
+      if (currentSetor) extraStr += ` | Setor: ${currentSetor}`;
+      if (selectedNotificadas.size) extraStr += ` | Unidades: ${Array.from(selectedNotificadas).join(', ')}`;
+
+      const text = `⏳ Resumo de Ocorrências Aguardando Análise - MedSênior\n` +
+                   `Total de ocorrências: ${total}${extraStr}\n` +
+                   `[Fase 1] Avaliar: ${fase1}\n` +
+                   `[Fase 3] Validar Causa/Plano: ${fase3}\n` +
+                   `[Fase 5] Validar Execução: ${fase5}\n` +
+                   `[Atrasadas] Com prazo expirado: ${atrasadas}\n` +
+                   `Gerado em: ${new Date().toLocaleString('pt-BR')}`;
+      navigator.clipboard.writeText(text).then(() => showNotice('Resumo copiado com sucesso!'));
+    };
+
+    // ========================================================
+    // CACHE LOCAL
+    // ========================================================
+    function loadSavedCache() {
+      try {
+        const savedAcoes = localStorage.getItem(STORAGE_KEY_ACOES);
+        if (savedAcoes) {
+          const p = JSON.parse(savedAcoes);
+          if (p && p.rows) processRowsAcoes(p.rows, p.fileName, false);
+        }
+        const savedAnalise = localStorage.getItem(STORAGE_KEY_ANALISE);
+        if (savedAnalise) {
+          const p = JSON.parse(savedAnalise);
+          if (p && p.rows) processRowsAnalise(p.rows, p.fileName, false);
+        }
+      } catch (e) {
+        console.warn('Erro ao carregar dados locais:', e);
+      }
+      updateTabBadges();
+    }
+
+    // ========================================================
+    // EVENTOS DE ENTRADA
+    // ========================================================
+    $('uploadBtn').onclick = () =>$('fileInput').click();
+
+    $('fileInput').onchange = e => {
+      const f = e.target.files[0];
+      if (!f) return;
+
+      $('fileName').textContent = 'Carregando arquivo...';
+      const reader = new FileReader();
+      reader.onload = ev => {
+        try {
+          const wb = XLSX.read(ev.target.result, { type: 'array', cellDates: true });
+          const ws = wb.Sheets[wb.SheetNames[0]];
+          const rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
+          autoDetectAndProcess(rows, f.name);
+        } catch (err) {
+          showNotice('Erro ao ler planilha: ' + err.message, true);
+          $('fileName').textContent = 'Erro no arquivo';
+        }
+      };
+      reader.readAsArrayBuffer(f);
+      e.target.value = '';
+    };
+
+    // Eventos Aba 1
+    $('respSearch').oninput = showPeople;
+    $('respSearch').onfocus = showPeople;
+    $('tipo').onchange = () => { currentPage = 1; render(); };
+    $('status').onchange = () => { currentKpiMode =$('status').value || null; currentPage = 1; render(); };
+    $('ocorrencia').onchange = () => { currentPage = 1; render(); };$('busca').oninput = () => { currentPage = 1; render(); };
+    $('all').onclick = () => { RESP.forEach(x => selectedResp.add(x)); drawChosen(); currentPage = 1; render(); showPeople(); };$('clear').onclick = () => { selectedResp.clear(); drawChosen(); currentPage = 1; render(); showPeople(); };
+
+    // Eventos Aba 2
+    $('notificadaSearch').oninput = showNotificadasSearch;
+    $('notificadaSearch').onfocus = showNotificadasSearch;
+
+    $('respSearchAnalise').oninput = showPeopleAnalise;
+    $('respSearchAnalise').onfocus = showPeopleAnalise;
+    $('faseAnalise').onchange = () => { curPageAnalise = 1; renderAnalise(); };$('buscaAnalise').oninput = () => { curPageAnalise = 1; renderAnalise(); };
+    $('allAnalise').onclick = () => { RESP_ANALISE.forEach(x => selectedRespAnalise.add(x)); drawChosenAnalise(); curPageAnalise = 1; renderAnalise(); showPeopleAnalise(); };$('clearAnalise').onclick = () => { selectedRespAnalise.clear(); drawChosenAnalise(); curPageAnalise = 1; renderAnalise(); showPeopleAnalise(); };
+
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.search')) {
+        $('results').classList.remove('open');
+        $('resultsAnalise').classList.remove('open');$('resultsNotificada').classList.remove('open');
+      }
+    });
+
+    
+    // ========================================================
+    // INTEGRAÇÃO DIRETA COM BANCO SQLITE (QUALIMED)
+    // ========================================================
+    async function syncDataFromSQLite() {
+      try {
+        console.log("Sincronizando dados de Ações e Análise com SQLite...");
+        
+        // 1. Carregar mapeamento oficial de setores por analista do SQLite
+        const mapRes = await fetch('/api/setores/map').then(r => r.json()).catch(() => null);
+        if (mapRes && Object.keys(mapRes).length > 0) {
+          Object.assign(SECTORS_ANALYSTS_MAP, mapRes);
+          populateAnalistaSelect();
+        }
+
+        // 2. Carregar Ações cadastradas da Aba 1
+        const acoesRes = await fetch('/api/acoes').then(r => r.json()).catch(() => null);
+        if (Array.isArray(acoesRes) && acoesRes.length > 0) {
+          DATA = acoesRes;
+          RESP = [...new Set(DATA.map(x => x.Responsável).filter(Boolean))].sort();
+          TIPOS = [...new Set(DATA.map(x => x.Tipo).filter(Boolean))].sort();
+          OCORRENCIAS = [...new Set(DATA.map(x => x.Ocorrência).filter(Boolean))].sort();
+          setupFiltersAcoes();
+          render();
+          $('fileName').textContent = "qualimed.sqlite (Banco Interno)";
+          $('lastUpdate').textContent = "Atualizado em " + new Date().toLocaleString('pt-BR');
+        }
+
+        // 3. Carregar Ocorrências Aguardando Análise do Time da Qualidade (Fases 1, 3 e 5)
+        const analiseRes = await fetch('/api/ocorrencias-analise').then(r => r.json()).catch(() => null);
+        if (Array.isArray(analiseRes) && analiseRes.length > 0) {
+          DATA_ANALISE = analiseRes;
+          RESP_ANALISE = [...new Set(DATA_ANALISE.map(x => x.Responsável).filter(Boolean))].sort();
+          FASES_ANALISE = [...new Set(DATA_ANALISE.map(x => x.Fase).filter(Boolean))].sort();
+          NOTIFICADAS_ANALISE = [...new Set(DATA_ANALISE.map(x => x['Unidade Notificada']).filter(Boolean))].sort();
+          setupFiltersAnalise();
+          renderAnalise();
+          $('fileNameAnalise').textContent = "EPA - Ocorrências Qualidade (" + DATA_ANALISE.length + " registros)";
+          $('lastUpdateAnalise').textContent = "Atualizado em " + new Date().toLocaleString('pt-BR');
+        }
+
+        updateTabBadges();
+        console.log("Ações e Ocorrências para Análise sincronizadas com sucesso!");
+
+        // Auto-selecionar analista se o usuário logado for analista
+        const sessionUser = window.QualiMedSession ? window.QualiMedSession.getUser() : null;
+        if (sessionUser && sessionUser.perfil === 'ANALISTA' && sessionUser.nome) {
+          const sAnalista = $('analistaSelect');
+          if (sAnalista) {
+            for (let i = 0; i < sAnalista.options.length; i++) {
+              if (sAnalista.options[i].value.toLowerCase() === sessionUser.nome.toLowerCase()) {
+                sAnalista.selectedIndex = i;
+                filterByAnalista(sAnalista.options[i].value);
+                break;
+              }
+            }
+          }
+        }
+      } catch (err) {
+        console.warn("Erro ao sincronizar do SQLite:", err);
+      }
+    }
+
+    const originalFileInputOnChange = $('fileInput').onchange;
+    $('fileInput').onchange = e => {
+      const f = e.target.files[0];
+      if (!f) return;
+
+      $('fileName').textContent = 'Carregando arquivo...';
+      const reader = new FileReader();
+      reader.onload = async ev => {
+        try {
+          const wb = XLSX.read(ev.target.result, { type: 'array', cellDates: true });
+          const ws = wb.Sheets[wb.SheetNames[0]];
+          const rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
+          
+          autoDetectAndProcess(rows, f.name);
+
+          const headers = Object.keys(rows[0] || {}).map(normalizeKey);
+          const isAnalise = headers.some(h => h.includes('fase') || h.includes('notificad') || h.includes('prazo da analise'));
+
+          if (isAnalise) {
+            await fetch('/api/ocorrencias/batch', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ occurrences: rows, replaceAll: false })
+            });
+            showNotice("Planilha de Ocorrências salva no banco SQLite com sucesso!");
+          } else {
+            await fetch('/api/acoes/batch', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ rows: rows, replaceAll: false })
+            });
+            showNotice("Planilha de Ações salva no banco SQLite com sucesso!");
+          }
+        } catch (err) {
+          showNotice('Erro ao ler planilha: ' + err.message, true);
+          $('fileName').textContent = 'Erro no arquivo';
+        }
+      };
+      reader.readAsArrayBuffer(f);
+      e.target.value = '';
+    };
+
+    syncDataFromSQLite();
+
+    loadSavedCache();
+    if (!DATA.length) render();
+    if (!DATA_ANALISE.length) renderAnalise();
+  </script>
+  <script src="/js/navbar.js"></script>
+</body>
+</html>
