@@ -28,6 +28,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SIGQ - Gestão da Qualidade & Consultoria Interna</title>
+    <!-- Firebase Web SDK (v10 compat) para Hospedagem Estática e Tempo Real (GitHub Pages) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="./firebase-config.js"></script>
+
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <style>
     /* Scrollbar personalizada e transições */
@@ -2442,6 +2448,207 @@
         }
       }
     }
+
+    // ========================================================
+    // INTEGRAÇÃO CLOUD FIRESTORE (TEMPO REAL - SÃO PAULO)
+    // ========================================================
+    let firestoreDb = null;
+    let isFirebaseActive = false;
+
+    function initFirebaseClient() {
+      let cfg = window.FIREBASE_CONFIG;
+      if (!cfg || !cfg.apiKey || cfg.apiKey.includes("SUA_API_KEY")) {
+        try {
+          const stored = localStorage.getItem("SIGQ_FIREBASE_CONFIG");
+          if (stored) {
+            const parsed = JSON.parse(stored);
+            if (parsed && parsed.apiKey && !parsed.apiKey.includes("SUA_API_KEY")) {
+              cfg = parsed;
+              window.FIREBASE_CONFIG = parsed;
+            }
+          }
+        } catch(e) {}
+      }
+
+      if (typeof firebase !== 'undefined' && cfg && cfg.apiKey && !cfg.apiKey.includes("SUA_API_KEY")) {
+        try {
+          if (!firebase.apps.length) {
+            firebase.initializeApp(cfg);
+          }
+          firestoreDb = firebase.firestore();
+          try {
+            firestoreDb.enablePersistence({ synchronizeTabs: true }).catch(() => {});
+          } catch(e) {}
+
+          isFirebaseActive = true;
+          console.log("[SIGQ Firebase] Conectado ao Cloud Firestore na região southamerica-east1 (São Paulo)!");
+          setupFirestoreRealtimeListeners();
+          return true;
+        } catch (err) {
+          console.error("[SIGQ Firebase] Erro ao inicializar Firebase:", err);
+          return false;
+        }
+      } else {
+        console.log("[SIGQ] Firebase não configurado. Utilizando banco local SQLite ou cache.");
+        return false;
+      }
+    }
+
+    function setupFirestoreRealtimeListeners() {
+      if (!firestoreDb) return;
+
+      const badge = document.getElementById("realtime-sync-badge");
+      const text = document.getElementById("realtime-sync-text");
+      if (badge) badge.classList.remove("hidden");
+      if (text) text.innerText = "Firebase Nuvem Ativo";
+
+      // 1. Coleção 'atividades' em tempo real
+      firestoreDb.collection("atividades").onSnapshot((snapshot) => {
+        if (snapshot.empty && activities.length > 0) {
+          syncLocalActivitiesToFirestore();
+          return;
+        }
+
+        const list = [];
+        snapshot.forEach(doc => {
+          const d = doc.data();
+          const docId = !isNaN(Number(doc.id)) ? Number(doc.id) : doc.id;
+          list.push({ ...d, id: docId });
+        });
+
+        if (list.length > 0) {
+          list.sort((a, b) => (a.data || '').localeCompare(b.data || '') || (a.id - b.id));
+          activities = list;
+          saveState();
+
+          const isModalActiveOpen = !document.getElementById("modal-activity")?.classList.contains("hidden") ||
+                                   !document.getElementById("modal-close-planning")?.classList.contains("hidden") ||
+                                   !document.getElementById("modal-action-5w2h")?.classList.contains("hidden") ||
+                                   !document.getElementById("modal-edit-diag")?.classList.contains("hidden");
+
+          if (!isModalActiveOpen) {
+            renderPlanejamento();
+            if (currentPlanejamentoViewMode === 'minhapauta') renderMinhaPauta();
+            renderActionPlan();
+            if (typeof renderDashboard === 'function') renderDashboard();
+            if (typeof renderDesempenhoTab === 'function') renderDesempenhoTab();
+          }
+
+          showNetworkSyncToast("Consultorias sincronizadas em tempo real (Firebase)!");
+        }
+      }, (err) => {
+        console.warn("[SIGQ Firebase] Listener de atividades:", err);
+      });
+
+      // 2. Coleção 'setores' em tempo real
+      firestoreDb.collection("setores").onSnapshot((snapshot) => {
+        if (!snapshot.empty) {
+          const list = [];
+          snapshot.forEach(doc => list.push(doc.data()));
+          if (list.length > 0) {
+            sectors = list;
+            saveState();
+            populateProcessDropdown();
+            populateActivitySectorSelect();
+            populatePlanejamentoFilterSelects();
+          }
+        }
+      });
+
+      // 3. Coleção 'diagnosticos' em tempo real
+      firestoreDb.collection("diagnosticos").onSnapshot((snapshot) => {
+        if (!snapshot.empty) {
+          const list = [];
+          snapshot.forEach(doc => list.push(doc.data()));
+          if (list.length > 0) {
+            diagnostics = list;
+            saveState();
+            renderDiagnostics();
+          }
+        }
+      });
+
+      // 4. Coleção 'planos_5w2h' em tempo real
+      firestoreDb.collection("planos_5w2h").onSnapshot((snapshot) => {
+        if (!snapshot.empty) {
+          const list = [];
+          snapshot.forEach(doc => {
+            const d = doc.data();
+            list.push({ ...d, id: !isNaN(Number(doc.id)) ? Number(doc.id) : doc.id });
+          });
+          actions5w2h = list;
+          saveState();
+          renderActionPlan();
+        }
+      });
+
+      // 5. Coleção 'usuarios' (analistas e gestor) em tempo real
+      firestoreDb.collection("usuarios").onSnapshot((snapshot) => {
+        if (!snapshot.empty) {
+          const list = [];
+          snapshot.forEach(doc => list.push(doc.data()));
+          window.firebaseUsers = list;
+        }
+      });
+    }
+
+    async function syncLocalActivitiesToFirestore() {
+      if (!firestoreDb || activities.length === 0) return;
+      try {
+        console.log(`[SIGQ Firebase] Inicializando Firestore com ${activities.length} atividades...`);
+        const batch = firestoreDb.batch();
+        activities.forEach(a => {
+          const ref = firestoreDb.collection("atividades").doc(String(a.id));
+          batch.set(ref, a, { merge: true });
+        });
+        await batch.commit();
+        console.log("[SIGQ Firebase] Sincronização inicial concluída com sucesso!");
+      } catch(e) {
+        console.warn("[SIGQ Firebase] Erro ao sincronizar atividades locais:", e);
+      }
+    }
+
+    async function firebaseSaveActivity(actObj) {
+      if (!firestoreDb) return;
+      try {
+        await firestoreDb.collection("atividades").doc(String(actObj.id)).set(actObj, { merge: true });
+      } catch(err) {
+        console.error("[SIGQ Firebase] Erro ao salvar atividade:", err);
+      }
+    }
+
+    async function firebaseDeleteActivity(id) {
+      if (!firestoreDb) return;
+      try {
+        await firestoreDb.collection("atividades").doc(String(id)).delete();
+      } catch(err) {
+        console.error("[SIGQ Firebase] Erro ao deletar atividade:", err);
+      }
+    }
+
+    async function firebaseSavePlan5w2h(planObj) {
+      if (!firestoreDb) return;
+      try {
+        await firestoreDb.collection("planos_5w2h").doc(String(planObj.id)).set(planObj, { merge: true });
+      } catch(err) {
+        console.error("[SIGQ Firebase] Erro ao salvar plano 5W2H:", err);
+      }
+    }
+
+    async function firebaseDeletePlan5w2h(id) {
+      if (!firestoreDb) return;
+      try {
+        await firestoreDb.collection("planos_5w2h").doc(String(id)).delete();
+      } catch(err) {
+        console.error("[SIGQ Firebase] Erro ao deletar plano 5W2H:", err);
+      }
+    }
+
+    window.initFirebaseClient = initFirebaseClient;
+    window.firebaseSaveActivity = firebaseSaveActivity;
+    window.firebaseDeleteActivity = firebaseDeleteActivity;
+    window.firebaseSavePlan5w2h = firebaseSavePlan5w2h;
+    window.firebaseDeletePlan5w2h = firebaseDeletePlan5w2h;
 
     // ========================================================
     // CARREGAMENTO CENTRALIZADO DO BANCO SQLITE
@@ -7097,6 +7304,11 @@
       if (confirm(`Tem certeza que deseja remover esta ação planejada de "${act.processo}"?`)) {
         activities = activities.filter(a => a.id !== id);
 
+        // Sincroniza Cloud Firestore (São Paulo)
+        if (typeof firebaseDeleteActivity === 'function') {
+          firebaseDeleteActivity(id);
+        }
+
         // Sincroniza SQLite backend
         try {
           fetch(`/api/atividades/${id}`, { method: 'DELETE' }).catch(() => {});
@@ -7405,6 +7617,16 @@
           activities.push({ id: newId, ...item });
         });
 
+        // Sincroniza lote de recorrentes no Cloud Firestore (São Paulo)
+        if (isFirebaseActive && firestoreDb) {
+          const batch = firestoreDb.batch();
+          recurringPayload.forEach(item => {
+            const ref = firestoreDb.collection("atividades").doc(String(item.id));
+            batch.set(ref, item, { merge: true });
+          });
+          batch.commit().catch(e => console.warn("Erro ao salvar recorrentes no Firestore:", e));
+        }
+
         saveState();
         closeModalActivity();
 
@@ -7425,6 +7647,9 @@
         const idx = activities.findIndex(a => a.id === Number(id));
         if (idx !== -1) {
           activities[idx] = { ...activities[idx], ...dataObj };
+          if (typeof firebaseSaveActivity === 'function') {
+            firebaseSaveActivity(activities[idx]);
+          }
         }
         let updateError = null;
         try {
@@ -7465,6 +7690,10 @@
         targetRecordId = nextId;
         const newRecord = { id: nextId, ...dataObj };
         activities.push(newRecord);
+
+        if (typeof firebaseSaveActivity === 'function') {
+          firebaseSaveActivity(newRecord);
+        }
 
         if (singleSaveError) {
           alert(`⚠️ ATENÇÃO: O agendamento foi guardado na memória deste computador, mas NÃO pôde ser gravado no banco central da rede!\n\nMotivo: ${singleSaveError}\n\nPara compartilhar com toda a equipe, utilize o botão "Sincronizar com Banco Central da Rede" no topo da tela ou verifique se o servidor está rodando (INICIAR_QUALIMED.bat).`);
@@ -7694,6 +7923,10 @@
       act.acompanhamento = JSON.stringify(notes);
 
       inputEl.value = "";
+
+      if (typeof firebaseSaveActivity === 'function') {
+        firebaseSaveActivity(act);
+      }
 
       try {
         fetch(`/api/atividades/${act.id}`, {
@@ -8074,6 +8307,11 @@
         act.status = "CANCELADO";
         act.motivo_status = motivo;
         showNetworkSyncToast("Consultoria cancelada com sucesso!");
+      }
+
+      // Sincroniza Cloud Firestore (São Paulo)
+      if (typeof firebaseSaveActivity === 'function') {
+        firebaseSaveActivity(act);
       }
 
       // Sincroniza SQLite backend
@@ -9024,6 +9262,11 @@
     }
 
     function startRealtimeSyncPoller() {
+      if (isFirebaseActive) {
+        console.log("[SIGQ Real-Time] Conexão ativa via Cloud Firestore (São Paulo).");
+        return;
+      }
+
       // 1. Conexão instantânea Server-Sent Events (SSE) - Notificação em tempo real (< 50ms)
       try {
         if (window.EventSource) {
@@ -9408,6 +9651,10 @@
         else if (a.status === "EM ANDAMENTO") a.status = "CONCLUÍDO";
         else a.status = "PENDENTE";
 
+        if (typeof firebaseSavePlan5w2h === 'function') {
+          firebaseSavePlan5w2h(a);
+        }
+
         try {
           await fetch(`/api/planos5w2h/${id}`, {
             method: 'PUT',
@@ -9499,7 +9746,7 @@
       }
 
       const finalId = newId || (actions5w2h.length > 0 ? Math.max(...actions5w2h.map(a => a.id)) + 1 : 1);
-      actions5w2h.unshift({
+      const newPlanObj = {
         id: finalId,
         what,
         why,
@@ -9510,7 +9757,11 @@
         status,
         categoria,
         subcategoria
-      });
+      };
+      actions5w2h.unshift(newPlanObj);
+      if (typeof firebaseSavePlan5w2h === 'function') {
+        firebaseSavePlan5w2h(newPlanObj);
+      }
 
       saveState();
       closeModalAction5w2h();
@@ -9927,8 +10178,13 @@
         if (openBtn) openBtn.href = getApiBaseUrl();
       }
 
-      // 2. Carregar dados centralizados do banco SQLite
-      loadDataFromSQLite();
+      // 1. Inicializar Firebase se configurado
+      const fbRunning = initFirebaseClient();
+
+      // 2. Carregar dados centralizados do banco SQLite se Firebase não estiver ativo
+      if (!fbRunning) {
+        loadDataFromSQLite();
+      }
 
       // Permitir abrir o calendário nativo clicando em qualquer ponto do campo de data
       document.addEventListener("click", (e) => {

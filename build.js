@@ -1,17 +1,28 @@
 const fs = require('fs');
 const path = require('path');
 
-if (!fs.existsSync('views')) fs.mkdirSync('views');
-if (!fs.existsSync('public')) fs.mkdirSync('public');
+const rootDir = __dirname;
+const viewsDir = path.join(rootDir, 'views');
+const publicDir = path.join(rootDir, 'public');
+
+if (!fs.existsSync(viewsDir)) fs.mkdirSync(viewsDir, { recursive: true });
+if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
 
 console.log('--- Construindo Plataforma da Qualidade (SIGQ) integrada ---');
 console.log('Processando views/index.html, public/index.html e index.html...');
 
-const sigqHtml = fs.readFileSync('plataforma_qualidade.html', 'utf8');
+const sigqHtmlPath = path.join(rootDir, 'plataforma_qualidade.html');
+const sigqHtml = fs.readFileSync(sigqHtmlPath, 'utf8');
 
-fs.writeFileSync(path.join('views', 'index.html'), sigqHtml, 'utf8');
-fs.writeFileSync(path.join('public', 'index.html'), sigqHtml, 'utf8');
-fs.writeFileSync('index.html', sigqHtml, 'utf8');
+fs.writeFileSync(path.join(viewsDir, 'index.html'), sigqHtml, 'utf8');
+fs.writeFileSync(path.join(publicDir, 'index.html'), sigqHtml, 'utf8');
+fs.writeFileSync(path.join(rootDir, 'index.html'), sigqHtml, 'utf8');
 
-console.log('index.html gerado com sucesso para compatibilidade Vercel e local!');
+// Copiar firebase-config.js e firebase-config.example.js para public/ se existirem
+const fbCfg = path.join(rootDir, 'firebase-config.js');
+if (fs.existsSync(fbCfg)) {
+  fs.copyFileSync(fbCfg, path.join(publicDir, 'firebase-config.js'));
+}
+
+console.log('index.html e public/index.html gerados com sucesso para GitHub Pages, Vercel e local!');
 console.log('--- Construção concluída com sucesso! ---');

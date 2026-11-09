@@ -1,0 +1,48 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ========================================================
+    // REGRAS DE SEGURANÇA - QUALIMED (SIGQ MEDSÊNIOR)
+    // Região: southamerica-east1 (São Paulo, Brasil)
+    // ========================================================
+
+    // 1. Atividades e Consultorias Planejadas
+    match /atividades/{atividadeId} {
+      allow read: if true;
+      allow create, update: if request.resource.data.processo != null 
+                            && request.resource.data.mes != null;
+      allow delete: if true;
+    }
+
+    // 2. Setores e Processos Corporativos
+    match /setores/{setorId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // 3. Diagnósticos de Criticidade e Ocorrências EPA
+    match /diagnosticos/{diagId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // 4. Planos de Ação 5W2H
+    match /planos_5w2h/{planoId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // 5. Usuários e Perfis de Acesso (Analistas e Gestão)
+    match /usuarios/{userId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // 6. Configurações Globais
+    match /config/{configId} {
+      allow read: if true;
+      allow write: if true;
+    }
+  }
+}
