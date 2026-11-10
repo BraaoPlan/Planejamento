@@ -1,14 +1,15 @@
 /**
- * Configuração Ativa do Firebase para a Plataforma QualiMed (SIGQ)
- * 
- * Substitua os valores abaixo pelos dados do seu Console Firebase:
+ * Configuração Oficial do Firebase - QualiMed (SIGQ)
+ * Projeto: plannerx-4e4ac
+ * Região: southamerica-east1 (São Paulo)
  */
 
 window.FIREBASE_CONFIG = {
-  apiKey: "SUA_API_KEY_AQUI",
-  authDomain: "seu-projeto.firebaseapp.com",
-  projectId: "seu-projeto-id",
-  storageBucket: "seu-projeto.appspot.com",
-  messagingSenderId: "123456789012",
-  appId: "1:123456789012:web:abcdef123456"
+  apiKey: "AIzaSyAXcoKrSFAY1AceZPHaeQA34RoFe-wT1zE",
+  authDomain: "plannerx-4e4ac.firebaseapp.com",
+  projectId: "plannerx-4e4ac",
+  storageBucket: "plannerx-4e4ac.firebasestorage.app",
+  messagingSenderId: "298021409964",
+  appId: "1:298021409964:web:af085e7d97b262159cfb09",
+  measurementId: "G-Y72X5M944M"
 };
