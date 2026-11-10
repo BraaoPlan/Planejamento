@@ -2616,10 +2616,27 @@
       }
     }
 
+    function cleanForFirestore(obj) {
+      if (!obj || typeof obj !== 'object') return obj;
+      const clean = {};
+      for (const [k, v] of Object.entries(obj)) {
+        if (v === undefined) {
+          clean[k] = null;
+        } else if (v !== null && typeof v === 'object' && !Array.isArray(v)) {
+          clean[k] = cleanForFirestore(v);
+        } else {
+          clean[k] = v;
+        }
+      }
+      return clean;
+    }
+
     async function firebaseSaveActivity(actObj) {
       if (!firestoreDb) return;
       try {
-        await firestoreDb.collection("atividades").doc(String(actObj.id)).set(actObj, { merge: true });
+        const sanitized = cleanForFirestore(actObj);
+        await firestoreDb.collection("atividades").doc(String(actObj.id)).set(sanitized, { merge: true });
+        console.log(`[SIGQ Firebase] Atividade #${actObj.id} sincronizada no Firestore.`);
       } catch(err) {
         console.error("[SIGQ Firebase] Erro ao salvar atividade:", err);
       }
@@ -7317,10 +7334,12 @@
           firebaseDeleteActivity(id);
         }
 
-        // Sincroniza SQLite backend
-        try {
-          fetch(`/api/atividades/${id}`, { method: 'DELETE' }).catch(() => {});
-        } catch(err) {}
+        // Sincroniza SQLite backend apenas se não estiver operando via Firebase
+        if (!isFirebaseActive) {
+          try {
+            fetch(`/api/atividades/${id}`, { method: 'DELETE' }).catch(() => {});
+          } catch(err) {}
+        }
 
         saveState();
         applyFilters();
@@ -7601,6 +7620,32 @@
           };
         });
 
+        if (isFirebaseActive) {
+          // Lote Recorrente no Firebase Cloud Firestore
+          recurringPayload.forEach((item, idx) => {
+            const newId = ((activities.length > 0 ? Math.max(...activities.map(a => Number(a.id) || 0)) : 0) + 1 + idx);
+            item.id = newId;
+            activities.push(item);
+          });
+
+          if (firestoreDb) {
+            const batch = firestoreDb.batch();
+            recurringPayload.forEach(item => {
+              const ref = firestoreDb.collection("atividades").doc(String(item.id));
+              batch.set(ref, cleanForFirestore(item), { merge: true });
+            });
+            batch.commit().catch(e => console.warn("Erro ao salvar recorrentes no Firestore:", e));
+          }
+
+          saveState();
+          closeModalActivity();
+          alert(`Sucesso: Foram agendadas ${recurringDates.length} consultorias recorrentes (${freqRecorrencia.toLowerCase()}) até ${formatDisplayDate(dataFimRecorrencia)}!`);
+          renderPlanejamento();
+          applyFilters();
+          return;
+        }
+
+        // Modo Local SQLite (INICIAR_QUALIMED.bat)
         let insertedIds = [];
         let recurringSaveError = null;
         try {
@@ -7627,16 +7672,6 @@
           activities.push({ id: newId, ...item });
         });
 
-        // Sincroniza lote de recorrentes no Cloud Firestore (São Paulo)
-        if (isFirebaseActive && firestoreDb) {
-          const batch = firestoreDb.batch();
-          recurringPayload.forEach(item => {
-            const ref = firestoreDb.collection("atividades").doc(String(item.id));
-            batch.set(ref, item, { merge: true });
-          });
-          batch.commit().catch(e => console.warn("Erro ao salvar recorrentes no Firestore:", e));
-        }
-
         saveState();
         closeModalActivity();
 
@@ -7661,52 +7696,67 @@
             firebaseSaveActivity(activities[idx]);
           }
         }
-        let updateError = null;
-        try {
-          const res = await fetch(`/api/atividades/${id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(dataObj)
-          });
-          if (!res.ok) updateError = `Status HTTP ${res.status}`;
-        } catch(err) {
-          updateError = err.message;
-          console.warn("Erro ao atualizar atividade no backend:", err);
-        }
-        if (updateError) {
-          alert(`⚠️ ATENÇÃO: A alteração foi salva localmente, mas não pôde ser sincronizada com o banco central da rede (${updateError}).`);
+
+        if (!isFirebaseActive) {
+          let updateError = null;
+          try {
+            const res = await fetch(`/api/atividades/${id}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(dataObj)
+            });
+            if (!res.ok) updateError = `Status HTTP ${res.status}`;
+          } catch(err) {
+            updateError = err.message;
+            console.warn("Erro ao atualizar atividade no backend:", err);
+          }
+          if (updateError) {
+            alert(`⚠️ ATENÇÃO: A alteração foi salva localmente, mas não pôde ser sincronizada com o banco central da rede (${updateError}).`);
+          }
+        } else {
+          showNetworkSyncToast("Consultoria atualizada no Cloud Firestore!");
         }
       } else {
-        let serverId = null;
-        let singleSaveError = null;
-        try {
-          const res = await fetch('/api/atividades', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(dataObj)
-          });
-          if (res.ok) {
-            const data = await res.json();
-            if (data && data.id) serverId = data.id;
-          } else {
-            singleSaveError = `Servidor retornou status HTTP ${res.status}`;
+        if (isFirebaseActive) {
+          // Modo Nuvem Firebase (GitHub Pages): Salva diretamente no Firestore sem chamar /api/
+          const nextId = (activities.length > 0 ? Math.max(...activities.map(a => Number(a.id) || 0)) + 1 : 1);
+          targetRecordId = nextId;
+          const newRecord = { id: nextId, ...dataObj };
+          activities.push(newRecord);
+
+          if (typeof firebaseSaveActivity === 'function') {
+            firebaseSaveActivity(newRecord);
           }
-        } catch(err) {
-          singleSaveError = err.message;
-          console.warn("Erro ao persistir atividade no backend:", err);
-        }
+          showNetworkSyncToast("Consultoria salva com sucesso no Cloud Firestore!");
+        } else {
+          // Modo Local SQLite (INICIAR_QUALIMED.bat)
+          let serverId = null;
+          let singleSaveError = null;
+          try {
+            const res = await fetch('/api/atividades', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(dataObj)
+            });
+            if (res.ok) {
+              const data = await res.json();
+              if (data && data.id) serverId = data.id;
+            } else {
+              singleSaveError = `Servidor retornou status HTTP ${res.status}`;
+            }
+          } catch(err) {
+            singleSaveError = err.message;
+            console.warn("Erro ao persistir atividade no backend:", err);
+          }
 
-        const nextId = serverId || (activities.length > 0 ? Math.max(...activities.map(a => a.id)) + 1 : 1);
-        targetRecordId = nextId;
-        const newRecord = { id: nextId, ...dataObj };
-        activities.push(newRecord);
+          const nextId = serverId || (activities.length > 0 ? Math.max(...activities.map(a => a.id)) + 1 : 1);
+          targetRecordId = nextId;
+          const newRecord = { id: nextId, ...dataObj };
+          activities.push(newRecord);
 
-        if (typeof firebaseSaveActivity === 'function') {
-          firebaseSaveActivity(newRecord);
-        }
-
-        if (singleSaveError) {
-          alert(`⚠️ ATENÇÃO: O agendamento foi guardado na memória deste computador, mas NÃO pôde ser gravado no banco central da rede!\n\nMotivo: ${singleSaveError}\n\nPara compartilhar com toda a equipe, utilize o botão "Sincronizar com Banco Central da Rede" no topo da tela ou verifique se o servidor está rodando (INICIAR_QUALIMED.bat).`);
+          if (singleSaveError) {
+            alert(`⚠️ ATENÇÃO: O agendamento foi guardado na memória deste computador, mas NÃO pôde ser gravado no banco central da rede!\n\nMotivo: ${singleSaveError}\n\nPara compartilhar com toda a equipe, utilize o botão "Sincronizar com Banco Central da Rede" no topo da tela ou verifique se o servidor está rodando (INICIAR_QUALIMED.bat).`);
+          }
         }
       }
 
@@ -8324,14 +8374,16 @@
         firebaseSaveActivity(act);
       }
 
-      // Sincroniza SQLite backend
-      try {
-        fetch(`/api/atividades/${id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(act)
-        }).catch(() => {});
-      } catch(err) {}
+      // Sincroniza SQLite backend apenas se não estiver operando via Firebase
+      if (!isFirebaseActive) {
+        try {
+          fetch(`/api/atividades/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(act)
+          }).catch(() => {});
+        } catch(err) {}
+      }
 
       saveState();
       closeModalClosePlanning();
