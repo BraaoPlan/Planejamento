@@ -2588,6 +2588,14 @@
           const list = [];
           snapshot.forEach(doc => list.push(doc.data()));
           window.firebaseUsers = list;
+          const analistasDocs = list.filter(u => u.perfil === 'ANALISTA' && (u.ativo === 1 || u.ativo === true));
+          if (analistasDocs.length > 0) {
+            analysts = analistasDocs.map(u => ({ nome: u.nome, pin: u.pin || "1234" }));
+            saveState();
+            populateAnalystDropdowns();
+            populateLoginAnalystSelect();
+            if (typeof populatePlanejamentoFilterSelects === 'function') populatePlanejamentoFilterSelects();
+          }
         }
       });
     }
@@ -7344,6 +7352,7 @@
       populateTimeSelectors();
       populateActivitySectorSelect();
       populateActivityCategoryCatalog();
+      populateAnalystDropdowns();
 
       const sectorToUse = preselectedSector || (currentSelectedSector !== 'TODOS' ? currentSelectedSector : '');
       if (sectorToUse) {
@@ -7396,6 +7405,7 @@
       document.getElementById("act-mes").value = act.mes;
       document.getElementById("act-data").value = act.data;
 
+      populateAnalystDropdowns();
       populateActivitySectorSelect();
       document.getElementById("act-processo").value = act.processo;
 
@@ -10168,7 +10178,10 @@
     }
 
     window.addEventListener("DOMContentLoaded", () => {
-      // 1. Detectar protocolo local (file://) e exibir banner explicativo
+      // 1. Inicialização completa da interface (popula dropdowns de analistas, setores, filtros e pautas)
+      initUI();
+
+      // 2. Detectar protocolo local (file://) e exibir banner explicativo
       if (window.location.protocol === 'file:') {
         const fileBanner = document.getElementById("file-protocol-warning-banner");
         if (fileBanner) fileBanner.classList.remove("hidden");
@@ -10178,10 +10191,10 @@
         if (openBtn) openBtn.href = getApiBaseUrl();
       }
 
-      // 1. Inicializar Firebase se configurado
+      // 3. Inicializar Firebase se configurado
       const fbRunning = initFirebaseClient();
 
-      // 2. Carregar dados centralizados do banco SQLite se Firebase não estiver ativo
+      // 4. Carregar dados centralizados do banco SQLite se Firebase não estiver ativo
       if (!fbRunning) {
         loadDataFromSQLite();
       }
