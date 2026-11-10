@@ -2456,6 +2456,22 @@
     let isFirebaseActive = false;
 
     function initFirebaseClient() {
+      // Se estiver em ambiente local / servidor da rede interna (localhost, 127.0.0.1 ou IPs de intranet),
+      // opera 100% via SQLite central da rede Z:, garantindo que todos os agendamentos locais funcionem com velocidade máxima.
+      const isLocalHost = window.location.hostname === 'localhost' ||
+                          window.location.hostname === '127.0.0.1' ||
+                          window.location.hostname.startsWith('10.') ||
+                          window.location.hostname.startsWith('192.168.') ||
+                          window.location.hostname.startsWith('172.') ||
+                          window.location.hostname.endsWith('.local') ||
+                          window.location.protocol === 'file:';
+
+      if (isLocalHost) {
+        console.log("[SIGQ] Ambiente Localhost/Rede Interna detectado. Operando 100% via SQLite central da rede.");
+        isFirebaseActive = false;
+        return false;
+      }
+
       let cfg = window.FIREBASE_CONFIG;
       if (!cfg || !cfg.apiKey || cfg.apiKey.includes("SUA_API_KEY")) {
         try {
@@ -7988,13 +8004,15 @@
         firebaseSaveActivity(act);
       }
 
-      try {
-        fetch(`/api/atividades/${act.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(act)
-        }).catch(() => {});
-      } catch(err) {}
+      if (!isFirebaseActive) {
+        try {
+          fetch(`/api/atividades/${act.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(act)
+          }).catch(() => {});
+        } catch(err) {}
+      }
 
       saveState();
       renderActivityNotesFeed(act);
@@ -8015,13 +8033,15 @@
       notes = notes.filter(n => String(n.id) !== String(noteId));
       act.acompanhamento = notes.length > 0 ? JSON.stringify(notes) : "";
 
-      try {
-        fetch(`/api/atividades/${act.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(act)
-        }).catch(() => {});
-      } catch(err) {}
+      if (!isFirebaseActive) {
+        try {
+          fetch(`/api/atividades/${act.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(act)
+          }).catch(() => {});
+        } catch(err) {}
+      }
 
       saveState();
       renderActivityNotesFeed(act);
@@ -8402,13 +8422,19 @@
 
       act.status = "EM ANDAMENTO";
 
-      try {
-        fetch(`/api/atividades/${id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(act)
-        }).catch(() => {});
-      } catch(err) {}
+      if (typeof firebaseSaveActivity === 'function') {
+        firebaseSaveActivity(act);
+      }
+
+      if (!isFirebaseActive) {
+        try {
+          fetch(`/api/atividades/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(act)
+          }).catch(() => {});
+        } catch(err) {}
+      }
 
       saveState();
       goToAcompanhamentoScreen();
@@ -8733,17 +8759,23 @@
       act.resultado = newResultado;
       act.acompanhamento = newAcompanhamento;
 
-      try {
-        fetch(`/api/atividades/${id}/resultado`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            status: newStatus,
-            resultado: newResultado,
-            acompanhamento: newAcompanhamento
-          })
-        }).catch(() => {});
-      } catch(err) {}
+      if (typeof firebaseSaveActivity === 'function') {
+        firebaseSaveActivity(act);
+      }
+
+      if (!isFirebaseActive) {
+        try {
+          fetch(`/api/atividades/${id}/resultado`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              status: newStatus,
+              resultado: newResultado,
+              acompanhamento: newAcompanhamento
+            })
+          }).catch(() => {});
+        } catch(err) {}
+      }
 
       saveState();
       closeModalQuickFollowup();
@@ -9717,14 +9749,16 @@
           firebaseSavePlan5w2h(a);
         }
 
-        try {
-          await fetch(`/api/planos5w2h/${id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ status: a.status })
-          });
-        } catch(err) {
-          console.warn("Erro ao atualizar status do plano 5w2h no backend:", err);
+        if (!isFirebaseActive) {
+          try {
+            await fetch(`/api/planos5w2h/${id}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ status: a.status })
+            });
+          } catch(err) {
+            console.warn("Erro ao atualizar status do plano 5w2h no backend:", err);
+          }
         }
 
         saveState();
@@ -9785,26 +9819,28 @@
       }
 
       let newId = null;
-      try {
-        const res = await fetch('/api/planos5w2h', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            what,
-            why,
-            where_setor: where,
-            who,
-            when_date: when,
-            how,
-            status,
-            categoria,
-            subcategoria
-          })
-        });
-        const data = await res.json();
-        if (data && data.id) newId = data.id;
-      } catch(err) {
-        console.warn("Erro ao persistir plano 5w2h no SQLite:", err);
+      if (!isFirebaseActive) {
+        try {
+          const res = await fetch('/api/planos5w2h', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              what,
+              why,
+              where_setor: where,
+              who,
+              when_date: when,
+              how,
+              status,
+              categoria,
+              subcategoria
+            })
+          });
+          const data = await res.json();
+          if (data && data.id) newId = data.id;
+        } catch(err) {
+          console.warn("Erro ao persistir plano 5w2h no SQLite:", err);
+        }
       }
 
       const finalId = newId || (actions5w2h.length > 0 ? Math.max(...actions5w2h.map(a => a.id)) + 1 : 1);
