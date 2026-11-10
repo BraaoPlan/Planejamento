@@ -13,6 +13,7 @@ serviceAccountKey.json
 *.sqlite-shm
 *.sqlite-journal
 backups/
+data/firebase_seed.json
 
 # Logs do Servidor e Testes
 *.log
