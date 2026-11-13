@@ -1012,7 +1012,7 @@ function getLocalIpAddress() {
 
 const LOCAL_IP = getLocalIpAddress();
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log('========================================================');
   console.log('[QUALIMED] Plataforma Integrada de Gestao da Qualidade (SIGQ)');
   console.log(`[ACESSO LOCAL]      http://localhost:${PORT}`);

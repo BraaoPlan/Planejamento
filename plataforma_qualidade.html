@@ -7083,19 +7083,6 @@
       }
 
       if (isAllSectorsMode) {
-          if (fMes !== "TODOS" && item.mes !== fMes) return false;
-          if (fAnalista !== "TODOS" && (item.consultor || "").toLowerCase() !== fAnalista.toLowerCase()) return false;
-          if (fStatus !== "TODOS" && item.status !== fStatus) return false;
-          if (search) {
-            const match = (item.atividade || "").toLowerCase().includes(search) ||
-                          (item.consultor || "").toLowerCase().includes(search) ||
-                          (item.responsavel || "").toLowerCase().includes(search) ||
-                          (item.categoria || "").toLowerCase().includes(search) ||
-                          (item.processo || "").toLowerCase().includes(search);
-            if (!match) return false;
-          }
-          return true;
-        });
 
         if (planKpiFilter === "CONCLUIDO" || planKpiFilter === "CONCLUÍDO") {
           globalFilteredActs = globalFilteredActs.filter(a => (a.status || '').toUpperCase().includes('CONCLU'));
@@ -7852,7 +7839,8 @@
           }
         }
 
-        if (!isFirebaseActive) {
+        const isStaticHost = window.location.hostname.includes('github.io');
+        if (!isFirebaseActive && !isStaticHost) {
           let updateError = null;
           try {
             const res = await fetch(`/api/atividades/${id}`, {
@@ -7868,7 +7856,7 @@
           if (updateError) {
             alert(`⚠️ ATENÇÃO: A alteração foi salva localmente, mas não pôde ser sincronizada com o banco central da rede (${updateError}).`);
           }
-        } else {
+        } else if (isFirebaseActive) {
           showNetworkSyncToast("Consultoria atualizada no Cloud Firestore!");
         }
       } else {
@@ -9018,14 +9006,37 @@
         subtitleText.innerText = `Visitas e consultorias programadas para o período. Registre os desfechos com agilidade.`;
       }
 
-      // Filtrar por analista e período
+      // Captura todos os filtros ativos (mês, analista, status, busca, setor)
+      const topAnalyst = document.getElementById("plan-filter-analista")?.value || "TODOS";
+      const activeAnalyst = (selAnalyst !== "TODOS") ? selAnalyst : topAnalyst;
+      const fStatus = document.getElementById("plan-filter-status")?.value || "TODOS";
+      const search = (document.getElementById("plan-filter-search")?.value || "").toLowerCase().trim();
+      const isAllSectors = !currentSelectedSector || currentSelectedSector === "TODOS";
+
+      // Filtrar por analista, setor, status, busca e período
       let filtered = activities.filter(item => {
-        // Filtro de analista
-        if (selAnalyst !== "TODOS") {
+        // Setor
+        if (!isAllSectors && (item.processo || '').trim().toLowerCase() !== currentSelectedSector.trim().toLowerCase()) return false;
+
+        // Analista
+        if (activeAnalyst !== "TODOS") {
           const sObj = sectors.find(s => s.setor === item.processo);
-          const isConsultor = (item.consultor || '').toLowerCase() === selAnalyst.toLowerCase();
-          const isTitular = (sObj?.analista || '').toLowerCase() === selAnalyst.toLowerCase();
+          const isConsultor = (item.consultor || '').toLowerCase() === activeAnalyst.toLowerCase();
+          const isTitular = (sObj?.analista || '').toLowerCase() === activeAnalyst.toLowerCase();
           if (!isConsultor && !isTitular) return false;
+        }
+
+        // Status
+        if (fStatus !== "TODOS" && item.status !== fStatus) return false;
+
+        // Busca
+        if (search) {
+          const match = (item.atividade || "").toLowerCase().includes(search) ||
+                        (item.consultor || "").toLowerCase().includes(search) ||
+                        (item.responsavel || "").toLowerCase().includes(search) ||
+                        (item.categoria || "").toLowerCase().includes(search) ||
+                        (item.processo || "").toLowerCase().includes(search);
+          if (!match) return false;
         }
 
         // Filtro de período
