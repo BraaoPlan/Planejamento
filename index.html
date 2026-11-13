@@ -3250,10 +3250,7 @@
         clearTimeout(gestorInactivityTimer);
         gestorInactivityTimer = null;
       }
-      ensureActivityTrackingCodes();
-      applyDynamicCurrentMonth();
       applyRolePermissions();
-      switchTab("planejamento");
     }
 
     // Inatividade: Bloqueio automático de segurança do Modo Gestão após 30 minutos sem interação
@@ -10356,6 +10353,9 @@
 
     // INICIALIZAÇÃO GERAL
     function initUI() {
+      ensureActivityTrackingCodes();
+      applyDynamicCurrentMonth();
+
       // Abre direto com os setores que possuem ações expandidos para visualização imediata das informações
       if (expandedSectorNames.size === 0) {
         getSortedSectorNames().forEach(s => {
@@ -10379,6 +10379,7 @@
       renderDesempenhoTab();
 
       applyRolePermissions();
+      switchTab("planejamento");
     }
 
     window.addEventListener("DOMContentLoaded", () => {
