@@ -145,6 +145,18 @@ try { db.exec("ALTER TABLE atividades ADD COLUMN recorrencia_freq TEXT;"); } cat
 try { db.exec("ALTER TABLE atividades ADD COLUMN recorrencia_fim TEXT;"); } catch(e) {}
 try { db.exec("ALTER TABLE atividades ADD COLUMN recorrencia_grupo TEXT;"); } catch(e) {}
 try { db.exec("ALTER TABLE atividades ADD COLUMN link_teams TEXT;"); } catch(e) {}
+try { db.exec("ALTER TABLE atividades ADD COLUMN codigo TEXT;"); } catch(e) {}
+try {
+  const actsWithoutCode = db.prepare("SELECT id FROM atividades WHERE codigo IS NULL OR codigo = '' ORDER BY id ASC").all();
+  if (actsWithoutCode.length > 0) {
+    const updateCode = db.prepare('UPDATE atividades SET codigo = ? WHERE id = ?');
+    db.exec('BEGIN TRANSACTION');
+    for (const a of actsWithoutCode) {
+      updateCode.run(`#CONS-${String(a.id).padStart(3, '0')}`, a.id);
+    }
+    db.exec('COMMIT');
+  }
+} catch(e) {}
 try { db.exec("ALTER TABLE planos_5w2h ADD COLUMN categoria TEXT;"); } catch(e) {}
 try { db.exec("ALTER TABLE planos_5w2h ADD COLUMN subcategoria TEXT;"); } catch(e) {}
 try { db.exec("UPDATE atividades SET categoria = 'Documentos' WHERE categoria IN ('GESTÃO DE DOCUMENTOS', 'Gestão de Documentos', 'Mapa de Processo', 'MAPA DE PROCESSO (NOVO)', 'MAPA DE PROCESSO/CCF') OR categoria LIKE '%MAPA DE PROCESSO%';"); } catch(e) {}

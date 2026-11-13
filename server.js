@@ -426,7 +426,12 @@ app.post('/api/atividades', (req, res) => {
         a.recorrente ? 1 : 0, a.recorrencia_freq || null, a.recorrencia_fim || null, a.recorrencia_grupo || null,
         a.link_teams || null
       );
-      insertedIds.push(result.lastInsertRowid);
+      const rowId = result.lastInsertRowid;
+      const code = a.codigo || `#CONS-${String(rowId).padStart(3, '0')}`;
+      try {
+        db.prepare('UPDATE atividades SET codigo = ? WHERE id = ?').run(code, rowId);
+      } catch(_) {}
+      insertedIds.push(rowId);
     }
     db.exec('COMMIT');
 
