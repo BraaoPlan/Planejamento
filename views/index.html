@@ -1060,7 +1060,7 @@
         <div class="flex items-center flex-wrap gap-2">
           <!-- Seletor de Modo de Exibição -->
           <div class="inline-flex rounded-xl bg-slate-100 p-1 border border-slate-200 text-xs font-semibold">
-            <button id="btn-mode-setor" onclick="setPlanejamentoViewMode('setores')" class="px-3 py-1.5 rounded-lg bg-white text-emerald-900 shadow-xs flex items-center space-x-1.5 transition-all font-bold">
+            <button id="btn-mode-setor" onclick="setPlanejamentoViewMode('setores')" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-emerald-800 flex items-center space-x-1.5 transition-all font-semibold">
               <svg class="w-3.5 h-3.5 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
               <span>Visão por Setores</span>
             </button>
@@ -1068,7 +1068,7 @@
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
               <span>Visão Cronograma Geral</span>
             </button>
-            <button id="btn-mode-minhapauta" onclick="setPlanejamentoViewMode('minhapauta')" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-emerald-800 flex items-center space-x-1.5 transition-all font-semibold">
+            <button id="btn-mode-minhapauta" onclick="setPlanejamentoViewMode('minhapauta')" class="px-3 py-1.5 rounded-lg bg-white text-emerald-900 shadow-xs flex items-center space-x-1.5 transition-all font-bold">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
               <span>Minha Pauta (Dia / Semana)</span>
             </button>
@@ -1217,7 +1217,7 @@
           <div class="flex items-center space-x-2">
             <button type="button" id="btn-toggle-plan-filters" onclick="togglePlanejamentoFilters()" class="inline-flex items-center px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors">
               <svg class="w-3.5 h-3.5 mr-1 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
-              <span id="btn-toggle-plan-filters-text">Filtros Avançados</span>
+              <span id="btn-toggle-plan-filters-text">Ocultar Filtros</span>
             </button>
             <button onclick="selectPlanejamentoSector('TODOS')" class="text-xs text-slate-600 hover:text-slate-900 font-bold hover:underline px-2">
               Ver Todos os Setores
@@ -1294,7 +1294,7 @@
         </div>
 
         <!-- FILTROS AVANÇADOS OPCIONAIS (MÊS, STATUS, BUSCA TEXTUAL) -->
-        <div id="plan-filters-body" class="hidden pt-3 border-t border-slate-100 space-y-3">
+        <div id="plan-filters-body" class="pt-3 border-t border-slate-100 space-y-3">
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <!-- Mês -->
             <div>
@@ -1355,7 +1355,7 @@
       <div id="plan-sector-banner" class="hidden"></div>
 
       <!-- CONTEÚDO MODO 1: VISÃO POR SETORES (RENDERIZA EXCLUSIVAMENTE O SETOR SELECIONADO) -->
-      <div id="plan-mode-container-setores" class="space-y-4">
+      <div id="plan-mode-container-setores" class="hidden space-y-4">
         <div id="plan-sectors-list" class="space-y-3.5">
           <!-- Injetado por JS: Card do setor selecionado ou placeholder limpo convidando à pesquisa -->
         </div>
@@ -1409,7 +1409,7 @@
       </div>
 
       <!-- CONTEÚDO MODO 3: MINHA PAUTA (DIA / SEMANA) - FOCO INDIVIDUAL DO ANALISTA -->
-      <div id="plan-mode-container-minhapauta" class="hidden space-y-4">
+      <div id="plan-mode-container-minhapauta" class="space-y-4">
         <!-- BARRA DE SELEÇÃO DA PAUTA (ANALISTA & PERÍODO) -->
         <div class="bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 rounded-2xl p-4 sm:p-5 text-white shadow-sm flex flex-wrap items-center justify-between gap-4">
           <div class="space-y-1">
@@ -1432,9 +1432,9 @@
 
             <!-- Seletor Rápido de Período -->
             <div class="inline-flex rounded-xl bg-black/30 p-1 border border-white/10 text-xs font-semibold">
-              <button id="pauta-btn-hoje" onclick="setPautaPeriod('hoje')" class="px-3 py-1 rounded-lg bg-emerald-500 text-white font-black shadow-xs transition-all">Hoje</button>
+              <button id="pauta-btn-hoje" onclick="setPautaPeriod('hoje')" class="px-3 py-1 rounded-lg text-emerald-100 hover:text-white transition-all font-bold">Hoje</button>
               <button id="pauta-btn-semana" onclick="setPautaPeriod('semana')" class="px-3 py-1 rounded-lg text-emerald-100 hover:text-white transition-all font-bold">Esta Semana</button>
-              <button id="pauta-btn-mes" onclick="setPautaPeriod('mes')" class="px-3 py-1 rounded-lg text-emerald-100 hover:text-white transition-all font-bold">Todo o Mês</button>
+              <button id="pauta-btn-mes" onclick="setPautaPeriod('mes')" class="px-3 py-1 rounded-lg bg-emerald-500 text-white font-black shadow-xs transition-all">Todo o Mês</button>
             </div>
           </div>
         </div>
@@ -6203,8 +6203,8 @@
     // ==============================================================
     // PLANEJAMENTO DE CONSULTORIA DA QUALIDADE & CONTAGEM DE HORAS
     // ==============================================================
-    let currentPlanejamentoViewMode = 'setores'; // 'setores', 'tabela' ou 'minhapauta'
-    let currentPautaPeriod = 'hoje'; // 'hoje', 'semana' ou 'mes'
+    let currentPlanejamentoViewMode = 'minhapauta'; // 'setores', 'tabela' ou 'minhapauta'
+    let currentPautaPeriod = 'mes'; // 'hoje', 'semana' ou 'mes'
 
     function setPlanejamentoViewMode(mode) {
       currentPlanejamentoViewMode = mode;
@@ -6230,6 +6230,8 @@
       if (isPauta) {
         populatePautaAnalystSelect();
         renderMinhaPauta();
+      } else {
+        renderPlanejamento();
       }
     }
 
@@ -6546,7 +6548,7 @@
     // CONTROLE DE FILTROS & DRILL-DOWN DE KPI DO PLANEJAMENTO
     // ==============================================
     let planKpiFilter = "TODOS"; // 'TODOS' | 'CONCLUÍDO' | 'EM ANDAMENTO' | 'PENDENTE' | 'OUTROS'
-    let isPlanFiltersHidden = true; // Inicia oculto para manter a tela limpa
+    let isPlanFiltersHidden = false; // Inicia aberto com filtros visíveis
 
     function togglePlanejamentoFilters() {
       isPlanFiltersHidden = !isPlanFiltersHidden;
@@ -6615,23 +6617,30 @@
       clearPlanejamentoSubFilters();
     }
 
-    function updatePlanejamentoKpiCardsForGeneral() {
-      let totalHoras = 0, horasConcluidas = 0, acoesConcluidas = 0;
+    function updatePlanejamentoKpiCards(list) {
+      const targetList = Array.isArray(list) ? list : activities;
+      let totalHoras = 0, totalAcoes = targetList.length;
+      let horasConcluidas = 0, acoesConcluidas = 0;
       let horasAndamento = 0, acoesAndamento = 0;
       let horasPendentes = 0, acoesPendentes = 0;
       let horasOutros = 0, acoesOutros = 0;
 
-      activities.forEach(a => {
+      targetList.forEach(a => {
         const ch = parseFloat(a.ch) || 4;
         totalHoras += ch;
-        if (a.status === 'CONCLUÍDO') {
-          horasConcluidas += ch; acoesConcluidas++;
-        } else if (a.status === 'EM ANDAMENTO') {
-          horasAndamento += ch; acoesAndamento++;
-        } else if (a.status === 'PENDENTE') {
-          horasPendentes += ch; acoesPendentes++;
+        const status = (a.status || '').toUpperCase().trim();
+        if (status === 'CONCLUÍDO' || status === 'CONCLUIDO') {
+          horasConcluidas += ch;
+          acoesConcluidas++;
+        } else if (status === 'EM ANDAMENTO') {
+          horasAndamento += ch;
+          acoesAndamento++;
+        } else if (status === 'PENDENTE') {
+          horasPendentes += ch;
+          acoesPendentes++;
         } else {
-          horasOutros += ch; acoesOutros++;
+          horasOutros += ch;
+          acoesOutros++;
         }
       });
 
@@ -6643,7 +6652,7 @@
       const elTotH = document.getElementById("plan-kpi-total-horas");
       const elTotA = document.getElementById("plan-kpi-total-acoes");
       if (elTotH) elTotH.innerText = `${totalHoras}h`;
-      if (elTotA) elTotA.innerText = `${activities.length} ações`;
+      if (elTotA) elTotA.innerText = `${totalAcoes} ações`;
 
       const elConclH = document.getElementById("plan-kpi-horas-concluidas");
       const elConclP = document.getElementById("plan-kpi-pct-concluidas");
@@ -6672,6 +6681,33 @@
       if (elOutH) elOutH.innerText = `${horasOutros}h`;
       if (elOutP) elOutP.innerText = `${pctOutros}%`;
       if (elOutA) elOutA.innerText = `${acoesOutros} reprogramadas/canc.`;
+    }
+
+    function updatePlanejamentoKpiCardsForGeneral(filteredList) {
+      if (Array.isArray(filteredList)) {
+        updatePlanejamentoKpiCards(filteredList);
+        return;
+      }
+      const fMes = document.getElementById("plan-filter-mes")?.value || "TODOS";
+      const fAnalista = document.getElementById("plan-filter-analista")?.value || "TODOS";
+      const fStatus = document.getElementById("plan-filter-status")?.value || "TODOS";
+      const search = (document.getElementById("plan-filter-search")?.value || "").toLowerCase().trim();
+
+      const filtered = activities.filter(item => {
+        if (fMes !== "TODOS" && item.mes !== fMes) return false;
+        if (fAnalista !== "TODOS" && (item.consultor || "").toLowerCase() !== fAnalista.toLowerCase()) return false;
+        if (fStatus !== "TODOS" && item.status !== fStatus) return false;
+        if (search) {
+          const match = (item.atividade || "").toLowerCase().includes(search) ||
+                        (item.consultor || "").toLowerCase().includes(search) ||
+                        (item.responsavel || "").toLowerCase().includes(search) ||
+                        (item.categoria || "").toLowerCase().includes(search) ||
+                        (item.processo || "").toLowerCase().includes(search);
+          if (!match) return false;
+        }
+        return true;
+      });
+      updatePlanejamentoKpiCards(filtered);
     }
 
     function updatePlanejamentoKpiCardsForSector(totalHoras, totalAcoes, concluidas, andamento, pendentes, outros) {
@@ -7022,12 +7058,31 @@
 
       const sortedSectors = getSortedSectorNames();
 
-      if (isAllSectorsMode) {
-        // ATUALIZAR KPIS GERAIS DA QUALIDADE
-        updatePlanejamentoKpiCardsForGeneral();
+      // Filtro global para cálculo geral conforme seletores ativos
+      let globalFilteredActs = activities.filter(item => {
+        if (!isAllSectorsMode && (item.processo || '').trim().toLowerCase() !== currentSelectedSector.trim().toLowerCase()) return false;
+        if (fMes !== "TODOS" && item.mes !== fMes) return false;
+        if (fAnalista !== "TODOS" && (item.consultor || "").toLowerCase() !== fAnalista.toLowerCase()) return false;
+        if (fStatus !== "TODOS" && item.status !== fStatus) return false;
+        if (search) {
+          const match = (item.atividade || "").toLowerCase().includes(search) ||
+                        (item.consultor || "").toLowerCase().includes(search) ||
+                        (item.responsavel || "").toLowerCase().includes(search) ||
+                        (item.categoria || "").toLowerCase().includes(search) ||
+                        (item.processo || "").toLowerCase().includes(search);
+          if (!match) return false;
+        }
+        return true;
+      });
 
-        // Filtro global para cálculo geral
-        let globalFilteredActs = activities.filter(item => {
+      // ATUALIZAR KPIS GERAIS DA QUALIDADE DINAMICAMENTE CONFORME FILTRO SELECIONADO
+      updatePlanejamentoKpiCards(globalFilteredActs);
+
+      if (currentPlanejamentoViewMode === 'minhapauta') {
+        renderMinhaPauta();
+      }
+
+      if (isAllSectorsMode) {
           if (fMes !== "TODOS" && item.mes !== fMes) return false;
           if (fAnalista !== "TODOS" && (item.consultor || "").toLowerCase() !== fAnalista.toLowerCase()) return false;
           if (fStatus !== "TODOS" && item.status !== fStatus) return false;
@@ -7170,7 +7225,7 @@
       const secPendentes = allActsInSector.filter(a => a.status === 'PENDENTE').reduce((acc, a) => acc + (parseFloat(a.ch) || 4), 0);
       const secOutros = allActsInSector.filter(a => a.status === 'REPROGRAMADO' || a.status === 'CANCELADO').reduce((acc, a) => acc + (parseFloat(a.ch) || 4), 0);
 
-      updatePlanejamentoKpiCardsForSector(secTotalHoras, allActsInSector.length, secConcluidas, secAndamento, secPendentes, secOutros);
+      updatePlanejamentoKpiCards(allActsInSector);
 
       let filteredActs = allActsInSector.filter(item => {
         if (fMes !== "TODOS" && item.mes !== fMes) return false;
@@ -8912,8 +8967,8 @@
         sel.value = currentVal;
       } else if (authenticatedUser?.role === "ANALISTA" && authenticatedUser?.nome) {
         sel.value = authenticatedUser.nome;
-      } else if (analystNames.length > 0) {
-        sel.value = analystNames[0];
+      } else {
+        sel.value = "TODOS";
       }
     }
 
@@ -9003,6 +9058,9 @@
       const horasConcluidas = concluidas.reduce((acc, a) => acc + (parseFloat(a.ch) || 4), 0);
       const pendentes = filtered.filter(a => a.status !== 'CONCLUÍDO');
       const horasPendentes = pendentes.reduce((acc, a) => acc + (parseFloat(a.ch) || 4), 0);
+
+      // Sincronizar dinamicamente os KPIs superiores com as atividades filtradas na Pauta
+      updatePlanejamentoKpiCards(filtered);
 
       // Renderizar Resumo Strip
       if (summaryStrip) {
@@ -10380,6 +10438,8 @@
 
       applyRolePermissions();
       switchTab("planejamento");
+      setPlanejamentoViewMode("minhapauta");
+      setPautaPeriod("mes");
     }
 
     window.addEventListener("DOMContentLoaded", () => {
