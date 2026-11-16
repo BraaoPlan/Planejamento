@@ -139,8 +139,8 @@ function handleServerError(res, err, friendlyMsg = 'Erro interno ao processar a 
   res.status(500).json({ error: friendlyMsg });
 }
 
-// Servir arquivos estáticos da pasta public
-app.use(express.static(path.join(__dirname, 'public')));
+// Servir arquivos estáticos da pasta public (sem interceptar rota raiz com index.html estático)
+app.use(express.static(path.join(__dirname, 'public'), { index: false }));
 
 // ========================================================
 // ROTAS DE PÁGINAS HTML (FRONTEND)
