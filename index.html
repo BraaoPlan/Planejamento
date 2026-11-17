@@ -47,11 +47,199 @@
 
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <style>
+    /* ========================================================== */
+    /* NOVA PALETA DE CORES PERSONALIZADA                        */
+    /* ========================================================== */
+    :root {
+      /* 1. Nova Paleta de Fundo e Estrutura Básica */
+      --bg-forest-green: #1f4d2e;       /* Fundo principal do site / body (Verde Floresta) */
+      --bg-sand-beige: #e0e2d0;         /* Estrutura: cards, painéis, modais (Bege-areia) */
+      --bg-sand-beige-subtle: #d6d9c4;  /* Cabeçalhos internos, tabelas e subpainéis */
+      --bg-sand-beige-input: #ebeee0;   /* Campos de formulário (inputs, selects, textareas) */
+      --border-sand: #c5c9b2;           /* Divisórias e bordas entre elementos bege */
+      --text-on-sand: #182219;          /* Texto escuro de alta legibilidade sobre o bege-areia */
+      --text-muted-on-sand: #455246;    /* Textos secundários/rótulos escuros e legíveis */
+
+      /* 2. Elementos Interativos e de Destaque */
+      --color-electric-purple: #7b3ff2;       /* Roxo Elétrico: botões de ação, links, abas ativas, ícones */
+      --color-electric-purple-hover: #692fe0; /* Variação de hover sutil */
+      --color-electric-purple-active: #5922cf;/* Variação de clique */
+      --color-purple-shadow: rgba(123, 63, 242, 0.28);
+    }
+
+    /* 1.1 Fundo Principal do Site / Body */
+    body {
+      background-color: var(--bg-forest-green) !important;
+      color: var(--text-on-sand);
+    }
+
+    /* 1.2 Estrutura Básica: Cards, Painéis e Áreas de Conteúdo (Bege-areia) */
+    .bg-white,
+    #global-filters-section,
+    #plan-global-filter-section,
+    #plan-mode-container-tabela,
+    #plan-sector-dropdown,
+    #modal-activity .bg-white,
+    #modal-gestor-login .bg-white,
+    #modal-manage-sectors .bg-white,
+    #modal-gestor-change-pwd .bg-white,
+    #modal-diagnostico-edit .bg-white,
+    #modal-relatorio-executivo .bg-white,
+    #modal-settings-webhook .bg-white {
+      background-color: var(--bg-sand-beige) !important;
+      border-color: var(--border-sand) !important;
+      color: var(--text-on-sand) !important;
+    }
+
+    /* Subpainéis, cabeçalhos de tabela, barras neutras e divisões */
+    .bg-slate-50,
+    .bg-slate-100,
+    .bg-slate-100\/70,
+    .bg-slate-50\/80,
+    thead.bg-slate-50,
+    thead tr,
+    tfoot {
+      background-color: var(--bg-sand-beige-subtle) !important;
+      border-color: var(--border-sand) !important;
+      color: var(--text-on-sand) !important;
+    }
+
+    /* Bordas estruturais ajustadas à tonalidade bege-areia */
+    .border-slate-200,
+    .border-slate-200\/90,
+    .border-slate-100,
+    .border-slate-300,
+    .divide-slate-100 > * + *,
+    .divide-slate-200 > * + * {
+      border-color: var(--border-sand) !important;
+    }
+
+    /* Inputs, selects e textareas na estrutura bege para máxima legibilidade */
+    input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
+    select,
+    textarea {
+      background-color: var(--bg-sand-beige-input) !important;
+      border-color: var(--border-sand) !important;
+      color: var(--text-on-sand) !important;
+    }
+
+    /* Garantir legibilidade: textos escuros e nítidos dentro dos cards/painéis */
+    .bg-white .text-slate-900,
+    .bg-white .text-slate-800,
+    .bg-white .text-slate-700,
+    .text-slate-900,
+    .text-slate-800,
+    .text-slate-700 {
+      color: var(--text-on-sand) !important;
+    }
+
+    .bg-white .text-slate-500,
+    .bg-white .text-slate-400,
+    .text-slate-500,
+    .text-slate-400 {
+      color: var(--text-muted-on-sand) !important;
+    }
+
+    /* 2.1 Botões Primários e Botões de Ação (Roxo Elétrico) */
+    .bg-emerald-600,
+    .bg-emerald-700,
+    .bg-emerald-800,
+    .bg-emerald-500,
+    #btn-execute-plan-search,
+    #pauta-btn-hoje.bg-emerald-500,
+    #pauta-btn-semana.bg-emerald-500,
+    #pauta-btn-mes.bg-emerald-500,
+    #btn-save-activity,
+    #btn-submit-conclusao,
+    #btn-sync-rescue-activities,
+    button[type="submit"]:not(.btn-neutral) {
+      background-color: var(--color-electric-purple) !important;
+      color: #ffffff !important;
+      border-color: var(--color-electric-purple) !important;
+    }
+
+    /* 2.2 Variação de Hover nos Botões de Ação (Leve variação do roxo) */
+    .bg-emerald-600:hover,
+    .bg-emerald-700:hover,
+    .bg-emerald-800:hover,
+    .bg-emerald-500:hover,
+    .hover\:bg-emerald-700:hover,
+    .hover\:bg-emerald-800:hover,
+    .hover\:bg-emerald-900:hover,
+    #btn-execute-plan-search:hover,
+    #btn-save-activity:hover,
+    #btn-submit-conclusao:hover,
+    #btn-sync-rescue-activities:hover,
+    button[type="submit"]:not(.btn-neutral):hover {
+      background-color: var(--color-electric-purple-hover) !important;
+      border-color: var(--color-electric-purple-hover) !important;
+    }
+
+    /* 2.3 Abas Ativas (Sub-Nav Tabs) */
+    .tab-btn.border-emerald-400,
+    .tab-btn[class*="border-emerald"] {
+      border-bottom-color: var(--color-electric-purple) !important;
+      color: #ffffff !important;
+    }
+
+    .tab-btn.border-emerald-400 svg,
+    .tab-btn[class*="border-emerald"] svg {
+      color: var(--color-electric-purple) !important;
+    }
+
+    .tab-btn:hover {
+      border-bottom-color: var(--color-electric-purple-hover) !important;
+    }
+
+    /* 2.4 Links, Textos Interativos e Ícones de Destaque */
+    a,
+    .text-emerald-600,
+    .text-emerald-700,
+    .text-emerald-800,
+    .hover\:text-emerald-800:hover,
+    .hover\:text-emerald-900:hover,
+    .cursor-pointer .text-emerald-700,
+    .cursor-pointer .text-emerald-600 {
+      color: var(--color-electric-purple) !important;
+    }
+
+    a:hover,
+    .text-emerald-600:hover,
+    .text-emerald-700:hover,
+    .text-emerald-800:hover {
+      color: var(--color-electric-purple-hover) !important;
+    }
+
+    /* Ícones de Destaque (ex: Logo "Q" no topo e ícones em botões/ações) */
+    .bg-emerald-600.text-white,
+    .w-10.h-10.rounded-2xl.bg-emerald-600 {
+      background-color: var(--color-electric-purple) !important;
+      color: #ffffff !important;
+    }
+
+    /* Foco Interativo nos Campos (Roxo Elétrico) */
+    input:focus,
+    select:focus,
+    textarea:focus,
+    .focus\:ring-emerald-500:focus,
+    .focus\:ring-emerald-500\/10:focus,
+    .focus\:ring-emerald-500\/20:focus {
+      border-color: var(--color-electric-purple) !important;
+      outline: none !important;
+      box-shadow: 0 0 0 3px var(--color-purple-shadow) !important;
+    }
+
+    /* Anel de Destaque Ativo em Cards de KPI */
+    .ring-emerald-600 {
+      --tw-ring-color: var(--color-electric-purple) !important;
+      border-color: var(--color-electric-purple) !important;
+    }
+
     /* Scrollbar personalizada e transições */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: rgba(0,0,0,0.03); }
-    ::-webkit-scrollbar-thumb { background: rgba(16,185,129,0.3); border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(16,185,129,0.6); }
+    ::-webkit-scrollbar-thumb { background: rgba(123, 63, 242, 0.4); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--color-electric-purple); }
 
     .badge { display: inline-flex; align-items: center; padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.025em; }
     .status-concluido { background-color: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
