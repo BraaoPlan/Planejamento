@@ -46,56 +46,232 @@
   </script>
 
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
-  <style>
+    <style>
     /* ========================================================== */
-    /* NOVA PALETA DE CORES PERSONALIZADA                        */
+    /* PALETA INSTITUCIONAL: TOPO VERDE & BASE BEGE COM ROXO     */
     /* ========================================================== */
     :root {
-      /* 1. Nova Paleta de Fundo e Estrutura Básica */
-      --bg-forest-green: #1f4d2e;       /* Fundo principal do site / body (Verde Floresta) */
-      --bg-sand-beige: #e0e2d0;         /* Estrutura: cards, painéis, modais (Bege-areia) */
-      --bg-sand-beige-subtle: #d6d9c4;  /* Cabeçalhos internos, tabelas e subpainéis */
-      --bg-sand-beige-input: #ebeee0;   /* Campos de formulário (inputs, selects, textareas) */
-      --border-sand: #c5c9b2;           /* Divisórias e bordas entre elementos bege */
-      --text-on-sand: #182219;          /* Texto escuro de alta legibilidade sobre o bege-areia */
-      --text-muted-on-sand: #455246;    /* Textos secundários/rótulos escuros e legíveis */
+      /* 1. Fundo Predominante e Estrutura Superior (Verde Floresta) */
+      --bg-forest-green: #1f4d2e;          /* Fundo principal do site / body */
+      --bg-forest-green-dark: #163a23;     /* Cabeçalhos superiores e barras */
+      --bg-forest-green-panel: #183f25;    /* Painéis, filtros e cards superiores */
+      --border-forest: rgba(255, 255, 255, 0.2); /* Bordas na área superior */
+      --text-on-forest: #ffffff;           /* Texto branco sobre verde floresta */
+      --text-muted-on-forest: #d1fae5;     /* Texto secundário claro sobre o verde */
 
-      /* 2. Elementos Interativos e de Destaque */
-      --color-electric-purple: #7b3ff2;       /* Roxo Elétrico: botões de ação, links, abas ativas, ícones */
-      --color-electric-purple-hover: #692fe0; /* Variação de hover sutil */
-      --color-electric-purple-active: #5922cf;/* Variação de clique */
-      --color-purple-shadow: rgba(123, 63, 242, 0.28);
+      /* 2. Blocos de Conteúdo e Tabelas Inferiores (Bege-areia) */
+      --bg-sand-beige: #e0e2d0;            /* Blocos de dados, rankings e tabelas inferiores */
+      --bg-sand-beige-subtle: #d6d9c4;     /* Cabeçalhos de tabelas e faixas neutras */
+      --bg-sand-beige-input: #ebeee0;      /* Campos e selects nas áreas beges */
+      --border-sand: #c5c9b2;              /* Divisórias entre elementos bege */
+      --text-on-sand: #0f172a;             /* Texto escuro de máxima legibilidade */
+      --text-dark-forest: #142819;         /* Verde floresta escuro para leitura perfeita */
+      --text-muted-on-sand: #3e4c40;       /* Textos secundários escuros sobre o bege */
+
+      /* 3. Botões e Elementos de Destaque (Roxo Elétrico) */
+      --color-electric-purple: #7b3ff2;       /* Pontos específicos de conversão e destaque */
+      --color-electric-purple-hover: #692fe0; /* Variação de hover */
+      --color-purple-shadow: rgba(123, 63, 242, 0.32);
     }
 
-    /* 1.1 Fundo Principal do Site / Body */
+    /* ---------------------------------------------------------- */
+    /* 1. FUNDO PREDOMINANTE & TOPO (VERDE FLORESTA #1f4d2e)     */
+    /* ---------------------------------------------------------- */
     body {
       background-color: var(--bg-forest-green) !important;
-      color: var(--text-on-sand);
+      color: var(--text-on-forest) !important;
     }
 
-    /* 1.2 Estrutura Básica: Cards, Painéis e Áreas de Conteúdo (Bege-areia) */
-    .bg-white,
+    /* Cabeçalho da página e Cabeçalho de Relatório (.report-header) */
+    header,
+    .report-header,
+    #report-header,
+    .top-header {
+      background-color: var(--bg-forest-green) !important;
+      color: #ffffff !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+    }
+
+    header h1, header h2, header p, header span:not(.badge-purple):not(.bg-rose-500),
+    .report-header h1, .report-header h2, .report-header p, .report-header span {
+      color: #ffffff !important;
+    }
+
+    /* Seção do Título do Setor (.sector-overview-row) e Banners */
+    .sector-overview-row,
+    #plan-sector-banner,
+    #sector-title-container,
+    #box-dash-sector-focus,
+    .sector-overview-header {
+      background-color: var(--bg-forest-green) !important;
+      border-color: rgba(255, 255, 255, 0.2) !important;
+      color: #ffffff !important;
+    }
+
+    .sector-overview-row *,
+    #plan-sector-banner *:not(.badge-purple):not(button):not(input):not(select) {
+      color: #ffffff !important;
+    }
+
+    /* Gráfico de Evolução e Áreas Analíticas Superiores */
+    .sector-evolution-chart,
+    .chart-container,
+    #dash-sec-distribuicao-body,
+    #dash-sector-chart-container,
+    .evolution-chart {
+      background-color: var(--bg-forest-green) !important;
+      border-color: rgba(255, 255, 255, 0.18) !important;
+      color: #ffffff !important;
+    }
+
+    /* Texto diretamente sobre fundo verde: Branco (#ffffff) ou tons bem claros */
+    .text-on-green,
+    .sector-overview-row .text-slate-900,
+    .sector-overview-row .text-slate-800,
+    .sector-overview-row .text-slate-700,
+    .report-header .text-slate-900,
+    .report-header .text-slate-800,
+    .report-header .text-slate-700 {
+      color: #ffffff !important;
+    }
+
+    .sector-overview-row .text-slate-500,
+    .sector-overview-row .text-slate-400,
+    .report-header .text-slate-500,
+    .report-header .text-slate-400 {
+      color: var(--text-muted-on-forest) !important;
+    }
+
+    /* Painéis, Filtros e Cards de KPI Superiores no Fundo Verde */
     #global-filters-section,
     #plan-global-filter-section,
+    #plan-card-kpi-total,
+    #plan-card-kpi-concluido,
+    #plan-card-kpi-andamento,
+    #plan-card-kpi-pendente,
+    #plan-card-kpi-outros,
+    #pauta-summary-strip {
+      background-color: var(--bg-forest-green-panel) !important;
+      border-color: rgba(255, 255, 255, 0.22) !important;
+      color: #ffffff !important;
+    }
+
+    #plan-global-filter-section *:not(button):not(input):not(select):not(.badge-purple),
+    #global-filters-section *:not(button):not(input):not(select):not(.badge-purple),
+    #plan-card-kpi-total span, #plan-card-kpi-total p, #plan-card-kpi-total div,
+    #plan-card-kpi-concluido span, #plan-card-kpi-concluido p, #plan-card-kpi-concluido div,
+    #plan-card-kpi-andamento span, #plan-card-kpi-andamento p, #plan-card-kpi-andamento div,
+    #plan-card-kpi-pendente span, #plan-card-kpi-pendente p, #plan-card-kpi-pendente div,
+    #plan-card-kpi-outros span, #plan-card-kpi-outros p, #plan-card-kpi-outros div {
+      color: #ffffff !important;
+    }
+
+    /* Inputs e selects na área verde superior */
+    #global-filters-section input,
+    #global-filters-section select,
+    #plan-global-filter-section input,
+    #plan-global-filter-section select {
+      background-color: rgba(255, 255, 255, 0.12) !important;
+      border-color: rgba(255, 255, 255, 0.3) !important;
+      color: #ffffff !important;
+    }
+    #global-filters-section input::placeholder,
+    #plan-global-filter-section input::placeholder {
+      color: rgba(255, 255, 255, 0.6) !important;
+    }
+    #global-filters-section select option,
+    #plan-global-filter-section select option {
+      background-color: #183f25 !important;
+      color: #ffffff !important;
+    }
+
+    /* Botões de borda simples vazados sobre o fundo verde (ex: "Ver o que vem", "Ocultar Filtros", "Limpar Filtros", etc.) */
+    .btn-vazado,
+    .btn-outline,
+    .btn-ghost,
+    #btn-toggle-dash-filters,
+    #btn-ver-todos-setores,
+    button.border-slate-300:not(.bg-emerald-600):not(.bg-rose-500),
+    #plan-global-filter-section button:not(#btn-execute-plan-search):not(.bg-emerald-600),
+    #global-filters-section button:not(.bg-emerald-600),
+    header button:not(.bg-emerald-600):not(.bg-rose-500) {
+      background-color: transparent !important;
+      border: 1px solid rgba(255, 255, 255, 0.6) !important;
+      color: #ffffff !important;
+    }
+
+    .btn-vazado:hover,
+    .btn-outline:hover,
+    .btn-ghost:hover,
+    #btn-toggle-dash-filters:hover,
+    #btn-ver-todos-setores:hover,
+    #plan-global-filter-section button:not(#btn-execute-plan-search):not(.bg-emerald-600):hover,
+    #global-filters-section button:not(.bg-emerald-600):hover,
+    header button:not(.bg-emerald-600):not(.bg-rose-500):hover {
+      background-color: rgba(255, 255, 255, 0.12) !important;
+      border-color: #ffffff !important;
+      color: #ffffff !important;
+    }
+
+    /* Abas de Navegação Superiores */
+    .tab-btn {
+      color: rgba(255, 255, 255, 0.8) !important;
+    }
+    .tab-btn:hover {
+      color: #ffffff !important;
+    }
+    .tab-btn.border-emerald-400,
+    .tab-btn[class*="border-emerald"] {
+      border-bottom-color: var(--color-electric-purple) !important;
+      color: #ffffff !important;
+    }
+    .tab-btn.border-emerald-400 svg,
+    .tab-btn[class*="border-emerald"] svg {
+      color: var(--color-electric-purple) !important;
+    }
+
+    /* ---------------------------------------------------------- */
+    /* 2. BLOCOS DE CONTEÚDO E TABELAS INFERIORES (BEGE-AREIA)   */
+    /* ---------------------------------------------------------- */
+    /* Somente seções inferiores de dados e tabelas */
+    .card-ranking-full,
+    .table-container,
     #plan-mode-container-tabela,
-    #plan-sector-dropdown,
+    #pauta-items-list > div,
+    #ranking-analistas-table-body,
+    #dash-sec-ranking-body,
+    #dash-drilldown-modal,
+    .data-content-box,
+    .signature-area,
+    .footer-signatures,
     #modal-activity .bg-white,
     #modal-gestor-login .bg-white,
     #modal-manage-sectors .bg-white,
     #modal-gestor-change-pwd .bg-white,
     #modal-diagnostico-edit .bg-white,
+    #modal-settings-webhook .bg-white,
     #modal-relatorio-executivo .bg-white,
-    #modal-settings-webhook .bg-white {
+    footer {
       background-color: var(--bg-sand-beige) !important;
       border-color: var(--border-sand) !important;
       color: var(--text-on-sand) !important;
     }
 
-    /* Subpainéis, cabeçalhos de tabela, barras neutras e divisões */
-    .bg-slate-50,
-    .bg-slate-100,
-    .bg-slate-100\/70,
-    .bg-slate-50\/80,
+    /* Tabelas nas seções inferiores */
+    .card-ranking-full table,
+    .table-container table,
+    #plan-mode-container-tabela table,
+    #pauta-items-list table,
+    #dash-drilldown-table-body,
+    table.data-table {
+      background-color: var(--bg-sand-beige) !important;
+      color: var(--text-on-sand) !important;
+    }
+
+    /* Cabeçalhos de Tabela e Faixas (Subtom Bege) */
+    .card-ranking-full thead,
+    .table-container thead,
+    #plan-mode-container-tabela thead,
     thead.bg-slate-50,
     thead tr,
     tfoot {
@@ -104,143 +280,133 @@
       color: var(--text-on-sand) !important;
     }
 
-    /* Bordas estruturais ajustadas à tonalidade bege-areia */
-    .border-slate-200,
-    .border-slate-200\/90,
-    .border-slate-100,
-    .border-slate-300,
-    .divide-slate-100 > * + *,
-    .divide-slate-200 > * + * {
+    .card-ranking-full th,
+    .table-container th,
+    #plan-mode-container-tabela th,
+    .card-ranking-full td,
+    .table-container td,
+    #plan-mode-container-tabela td {
+      color: var(--text-on-sand) !important;
       border-color: var(--border-sand) !important;
     }
 
-    /* Inputs, selects e textareas na estrutura bege para máxima legibilidade */
-    input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
-    select,
-    textarea {
+    /* Hover suave nas linhas das tabelas beges */
+    .card-ranking-full tbody tr:hover,
+    .table-container tbody tr:hover,
+    #plan-mode-container-tabela tbody tr:hover {
+      background-color: #d8dbca !important;
+    }
+
+    /* Textos escuros de alta legibilidade dentro dos blocos beges inferiores */
+    .card-ranking-full h1, .card-ranking-full h2, .card-ranking-full h3, .card-ranking-full h4,
+    .table-container h1, .table-container h2, .table-container h3, .table-container h4,
+    #plan-mode-container-tabela h1, #plan-mode-container-tabela h2, #plan-mode-container-tabela h3, #plan-mode-container-tabela h4,
+    #pauta-items-list h1, #pauta-items-list h2, #pauta-items-list h3, #pauta-items-list h4,
+    .signature-area h1, .signature-area h2, .signature-area h3, .signature-area h4 {
+      color: var(--text-on-sand) !important;
+    }
+
+    .card-ranking-full p, .card-ranking-full span:not(.badge):not(.badge-purple),
+    .table-container p, .table-container span:not(.badge):not(.badge-purple),
+    #plan-mode-container-tabela p, #plan-mode-container-tabela span:not(.badge):not(.badge-purple),
+    #pauta-items-list p, #pauta-items-list span:not(.badge):not(.badge-purple),
+    .signature-area p, .signature-area span {
+      color: var(--text-dark-forest) !important;
+    }
+
+    /* Inputs e selects dentro de blocos beges / modais */
+    #modal-activity input,
+    #modal-activity select,
+    #modal-activity textarea,
+    #modal-gestor-login input,
+    #modal-manage-sectors input,
+    #modal-manage-sectors select,
+    .card-ranking-full input,
+    .table-container input,
+    #plan-mode-container-tabela input,
+    #plan-mode-container-tabela select {
       background-color: var(--bg-sand-beige-input) !important;
       border-color: var(--border-sand) !important;
       color: var(--text-on-sand) !important;
     }
 
-    /* Garantir legibilidade: textos escuros e nítidos dentro dos cards/painéis */
-    .bg-white .text-slate-900,
-    .bg-white .text-slate-800,
-    .bg-white .text-slate-700,
-    .text-slate-900,
-    .text-slate-800,
-    .text-slate-700 {
-      color: var(--text-on-sand) !important;
-    }
-
-    .bg-white .text-slate-500,
-    .bg-white .text-slate-400,
-    .text-slate-500,
-    .text-slate-400 {
-      color: var(--text-muted-on-sand) !important;
-    }
-
-    /* 2.1 Botões Primários e Botões de Ação (Roxo Elétrico) */
-    .bg-emerald-600,
-    .bg-emerald-700,
-    .bg-emerald-800,
-    .bg-emerald-500,
+    /* ---------------------------------------------------------- */
+    /* 3. BOTÕES E DESTAQUES (ROXO ELÉTRICO #7b3ff2)              */
+    /* ---------------------------------------------------------- */
+    /* 3.1 Botões Primários de Ação e Conversão */
     #btn-execute-plan-search,
-    #pauta-btn-hoje.bg-emerald-500,
-    #pauta-btn-semana.bg-emerald-500,
-    #pauta-btn-mes.bg-emerald-500,
+    button[onclick="openModalNewActivity()"],
+    #pauta-btn-agendar,
     #btn-save-activity,
     #btn-submit-conclusao,
     #btn-sync-rescue-activities,
+    .btn-primary-action,
+    .btn-converter,
     button[type="submit"]:not(.btn-neutral) {
       background-color: var(--color-electric-purple) !important;
-      color: #ffffff !important;
       border-color: var(--color-electric-purple) !important;
+      color: #ffffff !important;
+      box-shadow: 0 2px 8px var(--color-purple-shadow) !important;
     }
 
-    /* 2.2 Variação de Hover nos Botões de Ação (Leve variação do roxo) */
-    .bg-emerald-600:hover,
-    .bg-emerald-700:hover,
-    .bg-emerald-800:hover,
-    .bg-emerald-500:hover,
-    .hover\:bg-emerald-700:hover,
-    .hover\:bg-emerald-800:hover,
-    .hover\:bg-emerald-900:hover,
+    /* Hover dos Botões Primários */
     #btn-execute-plan-search:hover,
+    button[onclick="openModalNewActivity()"]:hover,
+    #pauta-btn-agendar:hover,
     #btn-save-activity:hover,
     #btn-submit-conclusao:hover,
     #btn-sync-rescue-activities:hover,
+    .btn-primary-action:hover,
+    .btn-converter:hover,
     button[type="submit"]:not(.btn-neutral):hover {
       background-color: var(--color-electric-purple-hover) !important;
       border-color: var(--color-electric-purple-hover) !important;
-    }
-
-    /* 2.3 Abas Ativas (Sub-Nav Tabs) */
-    .tab-btn.border-emerald-400,
-    .tab-btn[class*="border-emerald"] {
-      border-bottom-color: var(--color-electric-purple) !important;
       color: #ffffff !important;
     }
 
-    .tab-btn.border-emerald-400 svg,
-    .tab-btn[class*="border-emerald"] svg {
-      color: var(--color-electric-purple) !important;
+    /* 3.2 Pílula/Badge da Nota Global do Setor (Fundo Roxo para Destaque) */
+    .badge-sector-grade,
+    .badge-ouro,
+    .badge-prata,
+    .badge-bronze,
+    #plan-sector-grade,
+    #sector-badge-status,
+    .badge-nota-setor {
+      background-color: var(--color-electric-purple) !important;
+      border-color: var(--color-electric-purple) !important;
+      color: #ffffff !important;
+      font-weight: 700 !important;
     }
 
-    .tab-btn:hover {
-      border-bottom-color: var(--color-electric-purple-hover) !important;
-    }
-
-    /* 2.4 Links, Textos Interativos e Ícones de Destaque */
-    a,
-    .text-emerald-600,
-    .text-emerald-700,
-    .text-emerald-800,
-    .hover\:text-emerald-800:hover,
-    .hover\:text-emerald-900:hover,
-    .cursor-pointer .text-emerald-700,
-    .cursor-pointer .text-emerald-600 {
-      color: var(--color-electric-purple) !important;
-    }
-
-    a:hover,
-    .text-emerald-600:hover,
-    .text-emerald-700:hover,
-    .text-emerald-800:hover {
-      color: var(--color-electric-purple-hover) !important;
-    }
-
-    /* Ícones de Destaque (ex: Logo "Q" no topo e ícones em botões/ações) */
-    .bg-emerald-600.text-white,
-    .w-10.h-10.rounded-2xl.bg-emerald-600 {
+    /* 3.3 Pequenas Tags de Destaque / Novidade (ex: Pílula de Resultado 100%) */
+    .badge-destaque,
+    .badge-novidade,
+    .badge-100,
+    .badge-100-percent,
+    .pill-100,
+    span[data-badge="100%"] {
       background-color: var(--color-electric-purple) !important;
       color: #ffffff !important;
+      border-color: var(--color-electric-purple-hover) !important;
+      font-weight: 700 !important;
     }
 
     /* Foco Interativo nos Campos (Roxo Elétrico) */
     input:focus,
     select:focus,
-    textarea:focus,
-    .focus\:ring-emerald-500:focus,
-    .focus\:ring-emerald-500\/10:focus,
-    .focus\:ring-emerald-500\/20:focus {
+    textarea:focus {
       border-color: var(--color-electric-purple) !important;
       outline: none !important;
       box-shadow: 0 0 0 3px var(--color-purple-shadow) !important;
     }
 
-    /* Anel de Destaque Ativo em Cards de KPI */
-    .ring-emerald-600 {
-      --tw-ring-color: var(--color-electric-purple) !important;
-      border-color: var(--color-electric-purple) !important;
-    }
-
-    /* Scrollbar personalizada e transições */
+    /* Scrollbar personalizada */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: rgba(0,0,0,0.03); }
     ::-webkit-scrollbar-thumb { background: rgba(123, 63, 242, 0.4); border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--color-electric-purple); }
 
+    /* Badges de Status (mantidos nítidos com bom contraste) */
     .badge { display: inline-flex; align-items: center; padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.025em; }
     .status-concluido { background-color: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
     .status-em-andamento { background-color: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
